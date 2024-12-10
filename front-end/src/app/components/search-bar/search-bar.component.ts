@@ -6,16 +6,32 @@ import { SearchService } from '../../services/search.service';
 @Component({
   selector: 'app-search-bar',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './search-bar.component.html',
-  styleUrls: ['./search-bar.component.css']
+  styleUrls: ['./search-bar.component.css'],
 })
 export class SearchBarComponent {
-  query: string = '';
+  searchKeyWords: string = ''; // Updated property name
+  athleteData: any = null;
+  error: string = '';
 
   constructor(private searchService: SearchService) {}
 
   search() {
-    this.searchService.search(this.query);
+    if (!this.searchKeyWords.trim()) {
+      this.error = 'Please enter a search term.';
+      return;
+    }
+
+    this.searchService.search(this.searchKeyWords).subscribe({
+      next: (data) => {
+        this.athleteData = data;
+        this.error = '';
+      },
+      error: (err) => {
+        this.error = 'Failed to fetch data. Please try again.';
+        console.error(err);
+      },
+    });
   }
 }

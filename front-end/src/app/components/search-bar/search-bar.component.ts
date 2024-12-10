@@ -11,11 +11,11 @@ import { SearchService } from '../../services/search.service';
   styleUrls: ['./search-bar.component.css']
 })
 export class SearchBarComponent {
-  query: string = '';
+  searchKeyWords: string = '';
 
   constructor(private searchService: SearchService) {}
 
   search() {
-    this.searchService.search(this.query);
+    this.searchService.search(this.searchKeyWords);
   }
 }

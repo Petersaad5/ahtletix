@@ -1,16 +1,25 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { NgModule } from '@angular/core';
+
+import { BrowserModule } from '@angular/platform-browser';
+
+import { FormsModule } from '@angular/forms';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class SearchService {
-  private resultsSubject = new BehaviorSubject<any[]>([]);
-  results$ = this.resultsSubject.asObservable();
+  private apiUrl = 'http://localhost:3000/basketball/teams'; // Ensure this matches your backend
 
-  search(query: string) {
-    // ici on met le code pour faire la recherche de meow meow
-    const mockResults = ['Athlete 1', 'Athlete 2', 'Athlete 3'];
-    this.resultsSubject.next(mockResults);
+  constructor(private http: HttpClient) {}
+
+  // Fetch data from the backend
+  search(query: string): Observable<any> {
+    // Send the query as a parameter to the backend
+    return this.http.get<any>(
+      `${this.apiUrl}?name=${encodeURIComponent(query)}`
+    );
   }
 }

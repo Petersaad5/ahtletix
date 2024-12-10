@@ -13,7 +13,7 @@ app.use(bodyParser.json()); // Parse JSON request bodies
 // basketball
 app.get('/basketball/teams', async (req, res) => {
     // getting the basketball teams
-    const query =  'SELECT ?team WHERE { ?team a dbo:BasketballTeam }';
+    const query =  'SELECT ?label WHERE { ?team a dbo:BasketballTeam ; rdfs:label ?label . FILTER (lang(?label) = "en") }';
     const url = `${dbEndpoint}?query=${encodeURIComponent(query)}&format=json`;
     const response = await fetch(url, {
     });
@@ -26,8 +26,8 @@ app.get('/basketball/teams', async (req, res) => {
 
     // parsing the json response
     const data = await response.json();
-    const teams = data.results.bindings.map(team => team.team.value);
-    console.log('response', response);
+    const labels = data.results.bindings.map(label => label.label.value);
+    console.log('response', labels);
 });
 
 app.get('/basketball/players', (req, res) => {

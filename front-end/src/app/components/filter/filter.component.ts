@@ -7,22 +7,32 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './filter.component.html',
   styleUrls: ['./filter.component.css'],
   standalone: true,
-  imports: [CommonModule, FormsModule] // Import CommonModule and FormsModule here
+  imports: [CommonModule, FormsModule],
 })
 export class FilterComponent {
-  filters: string[] = []; // Array to store the list of filters
-  newFilter: string = ''; // Variable to store the new filter input
+  sportsFilters: string[] = []; // List of filters for sports
+  countriesFilters: string[] = []; // List of filters for countries
 
-  // Method to add a new filter to the list
+  newFilter: string = ''; // Input for adding a new filter
+  filterType: string = ''; // Type of filter selected ('sport' or 'country')
+
+  // Add a filter dynamically based on the selected type
   addFilter() {
-    if (this.newFilter.trim()) { // Check if the input is not empty or just whitespace
-      this.filters.push(this.newFilter.trim()); // Add the new filter to the array
-      this.newFilter = ''; // Clear the input field
+    if (this.filterType === 'sport') {
+      this.sportsFilters.push(this.newFilter.trim());
+    } else if (this.filterType === 'country') {
+      this.countriesFilters.push(this.newFilter.trim());
     }
+    this.newFilter = ''; // Clear the input field
   }
 
-  // Method to remove a filter from the list
-  removeFilter(index: number) {
-    this.filters.splice(index, 1); // Remove the filter at the specified index
+  // Remove a sport filter
+  removeSportFilter(index: number) {
+    this.sportsFilters.splice(index, 1);
+  }
+
+  // Remove a country filter
+  removeCountryFilter(index: number) {
+    this.countriesFilters.splice(index, 1);
   }
 }

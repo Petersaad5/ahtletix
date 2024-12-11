@@ -1,22 +1,66 @@
 <div class="flex flex-col items-center w-full space-y-4">
-    <div class="flex items-center justify-center space-x-2 w-full">
-      <select class="select select-bordered bg-secondary-dark text-black max-w-xs">
-        <option disabled selected>Sélectionner un filtre</option>
-        <option>Filtrer par Pays</option>
-        <option>Filtrer par Sport</option>
-      </select>
-  
-      <input type="text" [(ngModel)]="newFilter" placeholder="Ecrire le filtre" class="input input-bordered bg-primary-dark w-full max-w-xs" />
-      <button class="btn btn-primary bg-secondary" (click)="addFilter()">Ajouter</button>
-    </div>
-  
-    <!-- List of filters -->
-    <div *ngIf="filters.length > 0" class="w-full max-w-xs bg-gray-300 p-4 rounded">
-      <ul class="list-disc list-inside">
-        <li *ngFor="let filter of filters; let i = index" class="text-primary flex items-center justify-between">
-          <span>{{ filter }}</span>
-          <button class="text-red-500 ml-1" (click)="removeFilter(i)">x</button>
-        </li>
-      </ul>
-    </div>
+  <!-- Dropdown to Select Filter Type -->
+  <div class="flex items-center justify-center space-x-2 w-full">
+    <select
+      [(ngModel)]="filterType"
+      class="select select-bordered bg-secondary-dark text-black max-w-xs"
+    >
+      <option disabled selected value="">Sélectionner un filtre</option>
+      <option value="country">Filtrer par Pays</option>
+      <option value="sport">Filtrer par Sport</option>
+    </select>
+
+    <!-- Input for Filter -->
+    <input
+      type="text"
+      [(ngModel)]="newFilter"
+      placeholder="Ecrire le filtre"
+      class="input input-bordered bg-primary-dark w-full max-w-xs"
+    />
+    <button
+      class="btn btn-primary bg-secondary"
+      (click)="addFilter()"
+      [disabled]="!filterType || !newFilter.trim()"
+    >
+      Ajouter
+    </button>
   </div>
+
+  <!-- Filters for Sports -->
+  <div
+    *ngIf="sportsFilters.length > 0"
+    class="w-full max-w-xs bg-gray-300 p-4 rounded"
+  >
+    <h3 class="text-lg font-bold mb-2">Filtres par Sport</h3>
+    <ul class="list-disc list-inside">
+      <li
+        *ngFor="let sport of sportsFilters; let i = index"
+        class="text-primary flex items-center justify-between"
+      >
+        <span>{{ sport }}</span>
+        <button class="text-red-500 ml-1" (click)="removeSportFilter(i)">
+          x
+        </button>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Filters for Countries -->
+  <div
+    *ngIf="countriesFilters.length > 0"
+    class="w-full max-w-xs bg-gray-300 p-4 rounded"
+  >
+    <h3 class="text-lg font-bold mb-2">Filtres par Pays</h3>
+    <ul class="list-disc list-inside">
+      <li
+        *ngFor="let country of countriesFilters; let i = index"
+        class="text-primary flex items-center justify-between"
+      >
+        <span>{{ country }}</span>
+        <button class="text-red-500 ml-1" (click)="removeCountryFilter(i)">
+          x
+        </button>
+      </li>
+    </ul>
+  </div>
+</div>

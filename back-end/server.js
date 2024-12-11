@@ -23,10 +23,7 @@ app.get('/barSearch', async (req, res) => {
     const filters = req.query.filters; // filters to apply to the search
 
     // sparql query
-    const query = `SELECT WHERE {
-        ?input a ?type; 
-        rdfs:label "${input}"@en .;
-    }`
+    const query =''; // TODO
 
     console.log('query', query); // TODO remove
 
@@ -49,54 +46,34 @@ app.get('/barSearch', async (req, res) => {
 app.get('/carouselSearch', async (req, res) => {
     // information about a sport was requested
     const sport = req.query.sport; // the sport that the client wants to get information about
+    // array of the sports that the client can search for
+    const sports = ["Basketball", "Football", "Handball", "Tennis", "Rugby"]; 
 
     // sparql query
-    if(sport === 'Basketball') {
+    if(sports.includes(sport)) {
         const query = `SELECT ?name ?placeToPlay ?teamSize ?firstPlayed ?associationName ?countries ?abstract WHERE {
         ?sport a dbo:Sport; 
-        rdfs:label "Basketball" @en;
-        rdfs:label ?name;
-        dbo:abstract ?abstract;
-        dbo:teamSize ?teamSize;
-        dbp:type ?placeToPlay;
-        dbp:first ?firstPlayed; 
-        dbp:region ?countries;
-        dbp:union ?union. 
-        ?union dbo:abbreviation ?associationName. 
-        FILTER (lang(?abstract) = "fr").
-        FILTER (lang(?name) = "fr").
-        }`
-    } else if(sport === 'Football') {
-        const query = `SELECT ?name ?abstract WHERE {
-        ?sport a dbo:Sport; 
-        rdfs:label "Football" @en;
-        rdfs:label ?name;
-        dbo:abstract ?abstract.
-        
+                rdfs:label "${sport}"@en;
+                rdfs:label ?name;
+                dbo:abstract ?abstract.
+                
+        OPTIONAL { ?sport dbo:teamSize ?teamSize. }
+        OPTIONAL { ?sport dbp:type ?placeToPlay. }
+        OPTIONAL { ?sport dbp:first ?firstPlayed. }
+        OPTIONAL { ?sport dbp:region ?countries. }
+        OPTIONAL { 
+            ?sport dbp:union ?union. 
+            ?union rdfs:label ?associationName. 
+            FILTER(lang(?associationName) = "fr").
+        }
+
         FILTER (lang(?abstract) = "fr").
         FILTER (lang(?name) = "fr").
         }`;
-    } else if(sport === 'Tennis') {
-        const query = `SELECT ?name ?teamSize ?placeToPlay ?associationName ?countries ?abstract WHERE {
-        ?sport a dbo:Sport; 
-        rdfs:label "Tennis" @en;
-        rdfs:label ?name;
-        dbo:abstract ?abstract;
-        dbo:team ?teamSize;
-        dbp:type ?placeToPlay;
-        dbp:region ?countries;
-        dbp:union ?union. 
-        ?union rdfs:label ?associationName. 
-        FILTER (lang(?abstract) = "fr").
-        FILTER (lang(?name) = "fr").
-        FILTER(lang(?associationName) = "fr").
-        }
-        `
+    } else {
+        res.status(400).send('Invalid sport');
+        return;
     }
-
-
-    console.log('query', query); // TODO remove
-
     // sending a request to the database
     const url = `${dbEndpoint}?query=${encodeURIComponent(query)}&format=json`;
     const response = await fetch(url, {});

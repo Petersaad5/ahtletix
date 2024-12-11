@@ -10,6 +10,50 @@ const dbEndpoint = 'https://dbpedia.org/sparql';
 app.use(cors()); // Enable CORS
 app.use(bodyParser.json()); // Parse JSON request bodies
 
+// Start the server
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
+});
+
+// Rest apis
+// Getting information about the sport
+app.get('/sportInfo', async (req, res) => {
+    // information about a sport was requested
+    const sport = req.query.sport;
+
+    // sparql query
+    const query = `SELECT ?information ?teamSize ?region ?name  WHERE {
+    ?sport rdf:type dbo:Sport;
+    rdfs:label "${sport}"@en; 
+    OPTIONAL { ?sport dbo:abstract ?information } . 
+    dbo:abstract ?information ;
+    dbo:teamSize ?teamSize ; 
+    dbp:name ?name; 
+    dbp:region ?region .
+
+    FILTER (lang(?information) = "en") 
+    FILTER (lang(?name) = "en")
+    FILTER (lang(?region) = "en")
+    }`;
+
+    console.log('query', query);
+
+    // sending a request to the database
+    const url = `${dbEndpoint}?query=${encodeURIComponent(query)}&format=json`;
+    const response = await fetch(url, {});
+
+    if(!response.ok) {
+        res.status(500).send('Failed to fetch data');
+        console.log('Failed to fetch data');
+        return;
+    }
+
+    const data = await response.json(); // serializing the response
+    console.log('response', data);
+    res.send(data);
+});
+
+
 // basketball
 app.get('/basketball/teams', async (req, res) => {
     // getting the basketball teams
@@ -35,7 +79,4 @@ app.get('/basketball/players', (req, res) => {
 });
 
 
-// Start the server
-app.listen(PORT, () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-});
+

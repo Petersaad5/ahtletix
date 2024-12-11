@@ -17,26 +17,85 @@ app.listen(PORT, () => {
 
 // Rest apis
 // Getting information about the sport
-app.get('/sportInfo', async (req, res) => {
+app.get('/barSearch', async (req, res) => {
     // information about a sport was requested
-    const sport = req.query.sport;
+    const input = req.query.input; // what the client entered in the search bar
+    const filters = req.query.filters; // filters to apply to the search
 
     // sparql query
-    const query = `SELECT ?information ?teamSize ?region ?name  WHERE {
-    ?sport rdf:type dbo:Sport;
-    rdfs:label "${sport}"@en; 
-    OPTIONAL { ?sport dbo:abstract ?information } . 
-    dbo:abstract ?information ;
-    dbo:teamSize ?teamSize ; 
-    dbp:name ?name; 
-    dbp:region ?region .
+    const query = `SELECT WHERE {
+        ?input a ?type; 
+        rdfs:label "${input}"@en .;
+    }`
 
-    FILTER (lang(?information) = "en") 
-    FILTER (lang(?name) = "en")
-    FILTER (lang(?region) = "en")
-    }`;
+    console.log('query', query); // TODO remove
 
-    console.log('query', query);
+    // sending a request to the database
+    const url = `${dbEndpoint}?query=${encodeURIComponent(query)}&format=json`;
+    const response = await fetch(url, {});
+
+    if(!response.ok) {
+        res.status(500).send('Failed to fetch data');
+        console.log('Failed to fetch data');
+        return;
+    }
+
+    const data = await response.json(); // serializing the response
+    console.log('response', data);
+    res.send(data);
+});
+
+// carrousel search
+app.get('/carouselSearch', async (req, res) => {
+    // information about a sport was requested
+    const sport = req.query.sport; // the sport that the client wants to get information about
+
+    // sparql query
+    if(sport === 'Basketball') {
+        const query = `SELECT ?name ?placeToPlay ?teamSize ?firstPlayed ?associationName ?countries ?abstract WHERE {
+        ?sport a dbo:Sport; 
+        rdfs:label "Basketball" @en;
+        rdfs:label ?name;
+        dbo:abstract ?abstract;
+        dbo:teamSize ?teamSize;
+        dbp:type ?placeToPlay;
+        dbp:first ?firstPlayed; 
+        dbp:region ?countries;
+        dbp:union ?union. 
+        ?union dbo:abbreviation ?associationName. 
+        FILTER (lang(?abstract) = "fr").
+        FILTER (lang(?name) = "fr").
+        }`
+    } else if(sport === 'Football') {
+        const query = `SELECT ?name ?abstract WHERE {
+        ?sport a dbo:Sport; 
+        rdfs:label "Football" @en;
+        rdfs:label ?name;
+        dbo:abstract ?abstract.
+        
+        FILTER (lang(?abstract) = "fr").
+        FILTER (lang(?name) = "fr").
+        }`;
+    } else if(sport === 'Tennis') {
+        const query = `SELECT ?name ?teamSize ?placeToPlay ?associationName ?countries ?abstract WHERE {
+        ?sport a dbo:Sport; 
+        rdfs:label "Tennis" @en;
+        rdfs:label ?name;
+        dbo:abstract ?abstract;
+        dbo:team ?teamSize;
+        dbp:type ?placeToPlay;
+        dbp:region ?countries;
+        dbp:union ?union. 
+        ?union rdfs:label ?associationName. 
+        FILTER (lang(?abstract) = "fr").
+        FILTER (lang(?name) = "fr").
+        FILTER(lang(?associationName) = "fr").
+        }
+        `
+    }
+
+
+    console.log('query', query); // TODO remove
 
     // sending a request to the database
     const url = `${dbEndpoint}?query=${encodeURIComponent(query)}&format=json`;
@@ -80,3 +139,11 @@ app.get('/basketball/players', (req, res) => {
 
 
 
+
+
+
+// TODO list
+// 1. create api calls that work for the carousel 
+// 2. create api calls that work for the search bar
+// 3. make the api call of the search bar work with the filters
+// 4. make the search bar take typos

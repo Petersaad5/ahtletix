@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
+import { CarouselComponent } from '../carousel/carousel.component';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
+import { FilterComponent } from '../filter/filter.component'; 
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [SearchBarComponent],
+  imports: [SearchBarComponent, CarouselComponent, FilterComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })

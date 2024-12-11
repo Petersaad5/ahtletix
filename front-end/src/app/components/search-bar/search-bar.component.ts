@@ -33,5 +33,6 @@ export class SearchBarComponent {
         console.error(err);
       },
     });
+    this.searchService.search(this.searchKeyWords);
   }
 }

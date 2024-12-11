@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
   providedIn: 'root',
 })
 export class SearchService {
-  private apiUrl = 'http://localhost:3000/basketball/teams'; // Ensure this matches your backend
+  private apiUrl = 'http://localhost:3000/barsearch'; // Ensure this matches your backend avec un paramètre de requête
 
   constructor(private http: HttpClient) {}
 

@@ -1,6 +1,6 @@
 class Sport {
     // Constructor and attributes
-    constructor(name, nbPlayers, placeToPlay, information, image, firstPlayed, associationName, countries, randomTeams, randomPlayers) {
+    constructor(name, nbPlayers, placeToPlay, information, image, firstPlayed, associationName, countries) {
         this.name = name;
         this.nbPlayers = nbPlayers;
         this.information = information;

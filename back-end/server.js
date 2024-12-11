@@ -47,19 +47,24 @@ app.get('/carouselSearch', async (req, res) => {
     // information about a sport was requested
     const sport = req.query.sport; // the sport that the client wants to get information about
     // array of the sports that the client can search for
-    const sports = ["Basketball", "Football", "Handball", "Tennis", "Rugby"]; 
-
+    const sports = ["Basketball", "Football", "Handball", "Tennis", "American football"]; 
+    let query = ""; 
     // sparql query
     if(sports.includes(sport)) {
-        const query = `SELECT ?name ?placeToPlay ?teamSize ?firstPlayed ?associationName ?countries ?abstract WHERE {
+        query = `SELECT ?name ?nbPlayers ?placeToPlay ?information ?image ?firstPlayed ?associationName ?countries WHERE {
         ?sport a dbo:Sport; 
                 rdfs:label "${sport}"@en;
                 rdfs:label ?name;
-                dbo:abstract ?abstract.
+                dbo:abstract ?information.
                 
-        OPTIONAL { ?sport dbo:teamSize ?teamSize. }
+        OPTIONAL { ?sport dbo:teamSize ?nbPlayers. }
         OPTIONAL { ?sport dbp:type ?placeToPlay. }
-        OPTIONAL { ?sport dbp:first ?firstPlayed. }
+        OPTIONAL { ?sport dbp:team ?nbPlayers. }
+        OPTIONAL { ?sport dbo:thumbnail ?image. }
+        OPTIONAL { 
+            ?sport dbp:first ?firstPlayed. 
+            FILTER (DATATYPE(?firstPlayed) = xsd:date). 
+        }
         OPTIONAL { ?sport dbp:region ?countries. }
         OPTIONAL { 
             ?sport dbp:union ?union. 
@@ -67,7 +72,7 @@ app.get('/carouselSearch', async (req, res) => {
             FILTER(lang(?associationName) = "fr").
         }
 
-        FILTER (lang(?abstract) = "fr").
+        FILTER (lang(?information) = "fr").
         FILTER (lang(?name) = "fr").
         }`;
     } else {
@@ -84,9 +89,19 @@ app.get('/carouselSearch', async (req, res) => {
         return;
     }
 
-    const data = await response.json(); // serializing the response
-    console.log('response', data);
-    res.send(data);
+    let data = await response.json(); 
+    const sportInfo = data.results.bindings.map(binding => ({
+        name: binding.name ? binding.name.value : null,
+        nbPlayers: binding.nbPlayers ? binding.nbPlayers.value : null,
+        placeToPlay: binding.placeToPlay ? binding.placeToPlay.value : null,
+        information: binding.information ? binding.information.value : null,
+        image: binding.image ? binding.image.value : null,
+        firstPlayed: binding.firstPlayed ? binding.firstPlayed.value : null,
+        associationName: binding.associationName ? binding.associationName.value : null,
+        countries: binding.countries ? binding.countries.value : null
+    }));
+    
+    res.send(sportInfo);
 });
 
 

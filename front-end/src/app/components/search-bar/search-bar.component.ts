@@ -1,44 +1,58 @@
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms'; // Import FormsModule
-import { CommonModule } from '@angular/common'; // Import CommonModule
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { SearchService } from '../../services/search.service';
+import { SharedDataService } from '../../services/shared-data.service';
 
 @Component({
   selector: 'app-search-bar',
   standalone: true,
-  imports: [FormsModule, CommonModule], // Include FormsModule and CommonModule
+  imports: [FormsModule, CommonModule],
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.css'],
 })
-export class SearchBarComponent {
+export class SearchBarComponent implements OnInit {
   searchKeyWords: string = ''; // Holds the search input value
   athleteData: any = null;
   error: string = '';
 
-  sportsFilters: string[] = []; // Assuming you have access to these filters
-  countriesFilters: string[] = []; // Assuming you have access to these filters
+  sportsFilters: string[] = []; // Sports filters received from the shared service
+  countriesFilters: string[] = []; // Country filters received from the shared service
 
-  constructor(private searchService: SearchService) {}
+  constructor(
+    private searchService: SearchService,
+    private sharedDataService: SharedDataService
+  ) {}
+
+  ngOnInit() {
+    // Subscribe to sports filters
+    this.sharedDataService.sportsFilters$.subscribe((filters) => {
+      this.sportsFilters = filters;
+    });
+
+    // Subscribe to country filters
+    this.sharedDataService.countriesFilters$.subscribe((filters) => {
+      this.countriesFilters = filters;
+    });
+  }
 
   search() {
     if (!this.searchKeyWords.trim()) {
-      this.error = 'Veuillez entrer un terme de recherche.';
+      alert('Veuillez entrer un terme de recherche.');
       return;
     }
 
-    // Sort filters
-    const sortedSportsFilters = [...this.sportsFilters].sort();
-    const sortedCountriesFilters = [...this.countriesFilters].sort();
+    // Prepare the filters
+    const filters = {
+      sports: this.sportsFilters,
+      countries: this.countriesFilters,
+    };
 
-    // Log sorted filters and search keywords
-    console.log('Search Keywords:', this.searchKeyWords);
-    console.log('Sorted Sports Filters:', sortedSportsFilters);
-    console.log('Sorted Countries Filters:', sortedCountriesFilters);
-
-    // Call the search service
-    this.searchService.search(this.searchKeyWords).subscribe({
+    // Send the search request to the backend
+    this.searchService.search(this.searchKeyWords, filters).subscribe({
       next: (data) => {
         this.athleteData = data;
+        console.log('Search Results:', data);
         this.error = '';
       },
       error: (err) => {

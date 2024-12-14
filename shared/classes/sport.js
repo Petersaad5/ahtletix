@@ -1,16 +1,15 @@
 class Sport {
     // Constructor and attributes
-    constructor(name, nbPlayers, placeToPlay, information, image, firstPlayed, associationName, countries) {
-        this.name = name;
-        this.nbPlayers = nbPlayers;
-        this.information = information;
-        this.placeToPlay = placeToPlay;
-        this.image = image;
-        this.firstPlayed = firstPlayed;
-        this.associationName = associationName;
-        this.countries = countries;
-        this.randomTeams = randomTeams;
-        this.randomPlayers = randomPlayers;
+    constructor(label, image, inception, authority, countryOfOrigin, icon, unicode, maxPlayers, minPlayers) {
+        this.label = label; 
+        this.image = image; //P18
+        this.insception = inception; //P571
+        this.authority = authority; //P797
+        this.countryOfOrigin = countryOfOrigin; //P495
+        this.icon = icon; //P2910
+        this.unicode = unicode; //P487
+        this.maxPlayers = maxPlayers; //P1873
+        this.minPlayers = minPlayers; //P1872
     }
 }
 

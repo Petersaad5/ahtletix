@@ -116,7 +116,6 @@ app.get('/carouselSearch', async (req, res) => {
 });
 
 
-// basketball
 app.get('/searchBar', async (req, res) => {
     let input = req.query.input; // the input that the client wants to search for
     let filters = req.query.filters; // the filters that the client wants to apply to the search
@@ -365,12 +364,12 @@ app.get('/searchBar', async (req, res) => {
 
 app.get('/autoCompletion', async (req, res) => {
     let input = req.query.input; // the input that the client wants to search for
-    let query = `SELECT DISTINCT ?itemLabel WHERE {
+    let query = `SELECT DISTINCT ?itemLabel ?item (COUNT(?claim) AS ?claimCount) WHERE {
         # Perform the search using the mwapi service
         SERVICE wikibase:mwapi {
             bd:serviceParam wikibase:endpoint "www.wikidata.org";
                             wikibase:api "EntitySearch";
-                            mwapi:search "${input}";
+                            mwapi:search "Chicago";
                             mwapi:language "fr".
             ?item wikibase:apiOutputItem mwapi:item.
         }
@@ -382,11 +381,16 @@ app.get('/autoCompletion', async (req, res) => {
             ?type rdfs:label ?typeLabel.
             FILTER(LANG(?typeLabel) = "en").
             FILTER regex(?typeLabel, "team|club", "i").    
-        }      
+        }
+
+        # Count the claims to rank by number of claims
+        ?item ?claim ?value.
+        FILTER(BOUND(?athleteId) || BOUND(?sport))  # At least one must be true
         
-        FILTER (BOUND(?athleteId) || BOUND(?sport))  # At least one must be true
         SERVICE wikibase:label { bd:serviceParam wikibase:language "fr". }
         }
+        GROUP BY ?item ?itemLabel
+        ORDER BY DESC(?claimCount)  # Order by the number of claims (most popular based on claims)
         LIMIT 10`;
 
     // sending a request to the database
@@ -400,12 +404,13 @@ app.get('/autoCompletion', async (req, res) => {
 
     const data = await response.json(); 
     let bindings = data.results.bindings;
-    let labels = [];
+    let retArray = [];
     for(let i in bindings) {
-        labels.push(bindings[i].itemLabel.value);
+        let json = {id: bindings[i].item.value, label: bindings[i].itemLabel.value};
+        retArray.push(json);
     }
 
-    res.send(labels);
+    res.send(retArray);
 }); 
 
 // TODO list

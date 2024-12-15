@@ -365,15 +365,29 @@ app.get('/searchBar', async (req, res) => {
 
 app.get('/autoCompletion', async (req, res) => {
     let input = req.query.input; // the input that the client wants to search for
-    let query = `SELECT DISTINCT ?label WHERE {
-        ?entity rdfs:label ?label.
-        FILTER (LANG(?label) = "fr").
-        FILTER regex(?label, "${input}.*", "i").
-    } 
-    LIMIT 3`;
+    let query = `SELECT DISTINCT ?itemLabel WHERE {
+        # Perform the search using the mwapi service
+        SERVICE wikibase:mwapi {
+            bd:serviceParam wikibase:endpoint "www.wikidata.org";
+                            wikibase:api "EntitySearch";
+                            mwapi:search "${input}";
+                            mwapi:language "fr".
+            ?item wikibase:apiOutputItem mwapi:item.
+        }
 
-    // TODO restrict the domain
-    console.log(query);
+        OPTIONAL { ?item wdt:P1447 ?athleteId. }  # Athlete (P1447)
+        OPTIONAL { # Team's sport (P641)
+            ?item wdt:P641 ?sport; 
+                  wdt:P31 ?type.
+            ?type rdfs:label ?typeLabel.
+            FILTER(LANG(?typeLabel) = "en").
+            FILTER regex(?typeLabel, "team|club", "i").    
+        }      
+        
+        FILTER (BOUND(?athleteId) || BOUND(?sport))  # At least one must be true
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "fr". }
+        }
+        LIMIT 10`;
 
     // sending a request to the database
     const url = `${wikidataEndPoint}?query=${encodeURIComponent(query)}&format=json`;
@@ -388,7 +402,7 @@ app.get('/autoCompletion', async (req, res) => {
     let bindings = data.results.bindings;
     let labels = [];
     for(let i in bindings) {
-        labels.push(bindings[i].label.value);
+        labels.push(bindings[i].itemLabel.value);
     }
 
     res.send(labels);

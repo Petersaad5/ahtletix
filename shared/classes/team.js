@@ -1,5 +1,5 @@
 class Team {
-    constructor(name, instanceOf, inception, label, image, logo, nickname, country, sport, sponsor, homeVenue, league, foundedBy, headQuarters, officialWebsite, kitSupplier, socialMediaFollowers, coach) { 
+    constructor(instanceOf, inception, label, image, logo, nickname, country, sport, sponsor, homeVenue, league, foundedBy, headQuarters, officialWebsite, kitSupplier, socialMediaFollowers, coach) { 
         this.instanceOf = instanceOf; // P31
         this.inception = inception; // P571
         this.label = label; // RDFS:label

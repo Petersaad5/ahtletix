@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const Sport = require('../shared/classes/sport.js');
 const Athlete = require('../shared/classes/athlete.js');
+const Team = require('../shared/classes/team.js');
 const app = express();
 const PORT = 3000;
 
@@ -186,81 +187,66 @@ app.get('/searchBar', async (req, res) => {
     }
     `;
     } else if(typeOfSearch === 'team') {
-        query = `SELECT ?label ?instanceOfLabel ?inception ?image ?logo ?nickname ?countryLabel ?sportLabel ?sponsorLabel 
-        ?homeVenueLabel ?leagueLabel ?foundedByLabel ?headQuartersLabel ?officialWebsite ?kitSupplierLabel 
-        ?socialMediaFollowers ?coachLabel
+        query = `SELECT ?label ?image ?logo ?nicknameLabel ?countryLabel ?sportLabel ?sponsorLabel 
+        ?homeVenueLabel ?leagueLabel ?foundedByLabel ?headQuartersLabel 
+        ?officialWebsite ?kitSupplierLabel ?socialMediaFollowers ?coachLabel ?inception
         WHERE {
-        
-        # Find the entity by label (assuming a label search)
-        ?entity rdfs:label "${input}"@en.
-
+    
         # Retrieve the label of the entity
-        ?entity rdfs:label ?label. FILTER (LANG(?label) = "en").
+        ${input} rdfs:label ?label. FILTER (LANG(?label) = "fr").
         
-        # Retrieve the instance of (P31)
-        OPTIONAL { ?entity wdt:P31 ?instanceOf. }
-        OPTIONAL { ?instanceOf rdfs:label ?instanceOfLabel. FILTER (LANG(?instanceOfLabel) = "en"). }
+        # Retrieve the image (P18)
+        OPTIONAL { ${input} wdt:P18 ?image. }
         
-        # Retrieve the inception (P571)
-        OPTIONAL { ?entity wdt:P571 ?inception. }
-        
-        # Retrieve image (P18)
-        OPTIONAL { ?entity wdt:P18 ?image. }
-        
-        # Retrieve logo (P154)
-        OPTIONAL { ?entity wdt:P154 ?logo. }
+        # Retrieve the logo (P154)
+        OPTIONAL { ${input} wdt:P154 ?logo. }
         
         # Retrieve nickname (P1449)
-        OPTIONAL { ?entity wdt:P1449 ?nickname. }
+        OPTIONAL { ${input} wdt:P1449 ?nickname. }
         
-        # Retrieve country (P17)
-        OPTIONAL { ?entity wdt:P17 ?country. }
-        OPTIONAL { ?country rdfs:label ?countryLabel. FILTER (LANG(?countryLabel) = "en"). }
+        # Retrieve the country (P17)
+        OPTIONAL { ${input} wdt:P17 ?country. }
         
-        # Retrieve sport (P641)
-        OPTIONAL { ?entity wdt:P641 ?sport. }
-        OPTIONAL { ?sport rdfs:label ?sportLabel. FILTER (LANG(?sportLabel) = "en"). }
+        # Retrieve the sport (P641)
+        OPTIONAL { ${input} wdt:P641 ?sport. }
         
-        # Retrieve sponsor (P859)
-        OPTIONAL { ?entity wdt:P859 ?sponsor. }
-        OPTIONAL { ?sponsor rdfs:label ?sponsorLabel. FILTER (LANG(?sponsorLabel) = "en"). }
+        # Retrieve the sponsor (P859)
+        OPTIONAL { ${input} wdt:P859 ?sponsor. }
         
-        # Retrieve home venue (P115)
-        OPTIONAL { ?entity wdt:P115 ?homeVenue. }
-        OPTIONAL { ?homeVenue rdfs:label ?homeVenueLabel. FILTER (LANG(?homeVenueLabel) = "en"). }
+        # Retrieve the home venue (P115)
+        OPTIONAL { ${input} wdt:P115 ?homeVenue. }
         
-        # Retrieve league (P118)
-        OPTIONAL { ?entity wdt:P118 ?league. }
-        OPTIONAL { ?league rdfs:label ?leagueLabel. FILTER (LANG(?leagueLabel) = "en"). }
+        # Retrieve the league (P118)
+        OPTIONAL { ${input} wdt:P118 ?league. }
         
-        # Retrieve founder (P112)
-        OPTIONAL { ?entity wdt:P112 ?foundedBy. }
-        OPTIONAL { ?foundedBy rdfs:label ?foundedByLabel. FILTER (LANG(?foundedByLabel) = "en"). }
+        # Retrieve the founder(s) (P112)
+        OPTIONAL { ${input} wdt:P112 ?foundedBy. }
         
         # Retrieve headquarters (P159)
-        OPTIONAL { ?entity wdt:P159 ?headQuarters. }
-        OPTIONAL { ?headQuarters rdfs:label ?headQuartersLabel. FILTER (LANG(?headQuartersLabel) = "en"). }
+        OPTIONAL { ${input} wdt:P159 ?headQuarters. }
         
-        # Retrieve official website (P856)
-        OPTIONAL { ?entity wdt:P856 ?officialWebsite. }
+        # Retrieve the official website (P856)
+        OPTIONAL { ${input} wdt:P856 ?officialWebsite. }
         
-        # Retrieve kit supplier (P5995)
-        OPTIONAL { ?entity wdt:P5995 ?kitSupplier. }
-        OPTIONAL { ?kitSupplier rdfs:label ?kitSupplierLabel. FILTER (LANG(?kitSupplierLabel) = "en"). }
+        # Retrieve the kit supplier (P5995)
+        OPTIONAL { ${input} wdt:P5995 ?kitSupplier. }
         
         # Retrieve social media followers (P8687)
-        OPTIONAL { ?entity wdt:P8687 ?socialMediaFollowers. }
+        OPTIONAL { ${input} wdt:P8687 ?socialMediaFollowers. }
         
-        # Retrieve coach (P286)
-        OPTIONAL { ?entity wdt:P286 ?coach. }
-        OPTIONAL { ?coach rdfs:label ?coachLabel. FILTER (LANG(?coachLabel) = "en"). }
+        # Retrieve the coach (P286)
+        OPTIONAL { ${input} wdt:P286 ?coach. }
+        
+        # Retrieve the inception date (P571)
+        OPTIONAL { ${input} wdt:P571 ?inception. }
 
         # Fetch labels for related entities
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "fr". }
         }
-        LIMIT 1`; 
-
-        // TODO this query is not working
+        `; 
+    } else {
+        res.status(400).send('Invalid type of search');
+        return;
     }
 
     // sending a request to the database
@@ -298,9 +284,9 @@ app.get('/searchBar', async (req, res) => {
         );
     } else if(typeOfSearch === 'team') {
         object = new Team(
-            'label' in binding ? binding.label.value : null,
             'instanceOfLabel' in binding ? binding.instanceOfLabel.value : null,
             'inception' in binding ? binding.inception.value : null,
+            'label' in binding ? binding.label.value : null,
             'image' in binding ? binding.image.value : null,
             'logo' in binding ? binding.logo.value : null,
             'nickname' in binding ? binding.nickname.value : null,

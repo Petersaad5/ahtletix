@@ -1,0 +1,69 @@
+<div class="flex flex-col items-center min-h-screen bg-neutral-light">
+  <!-- Header Section -->
+  <div class="w-full text-center py-6 bg-primary-dark text-neutral-light">
+    <div class="text-5xl font-bold">Informations de {{ player.name }}</div>
+    <div class="text-xl mt-2">{{ player.nickname }} | {{ player.sport }}</div>
+  </div>
+
+  <!-- Main Content Section -->
+  <div class="flex flex-row w-full flex-grow">
+    <!-- Player Image Section -->
+    <div class="w-1/2 flex items-center justify-center bg-neutral-light p-6">
+      <img [src]="player.image" alt="{{ player.name }}" class="w-2/3 h-auto object-contain rounded-lg shadow-lg" style="height: 50vh;">    </div>
+
+    <!-- Player Info Section -->
+    <div class="w-1/2 flex flex-col justify-start p-12">
+      <div class="text-6xl font-black text-primary-dark">{{ player.name }}</div>
+      <div class="text-3xl font-semibold text-primary-dark mt-4">{{ player.position }}</div>
+      <div class="text-3xl font-semibold text-primary-dark">{{ player.team }}</div>
+      
+      <div class="text-2xl font-medium text-primary-dark mt-6">
+        <span class="font-bold">Height:</span> {{ player.height }}
+      </div>
+      <div class="text-2xl font-medium text-primary-dark">
+        <span class="font-bold">Weight:</span> {{ player.weight }}
+      </div>
+      <div class="text-2xl font-medium text-primary-dark">
+        <span class="font-bold">Age:</span> {{ player.age }} years old
+      </div>
+      <div class="text-2xl font-medium text-primary-dark mt-4">
+        <span class="font-bold">Nationality:</span> {{ player.nationality }}
+      </div>
+      <div class="text-2xl font-medium text-primary-dark mt-4">
+        <span class="font-bold">Place of Birth:</span> {{ player.placeOfBirth }}
+      </div>
+      <div class="text-xl font-light text-primary-dark mt-6 italic">{{ player.information }}</div>
+    </div>
+  </div>
+
+  <!-- Additional Information Section -->
+  <div class="w-full p-8 bg-neutral-light">
+    <div class="max-w-6xl mx-auto">
+      <!-- Teams Section -->
+      <div class="mb-8">
+        <div class="text-4xl font-bold text-primary-dark">Teams</div>
+        <ul class="mt-4 text-2xl text-primary-dark">
+          <li *ngFor="let team of player.teams">
+            <span class="font-bold">{{ team.name }}</span>: {{ team.years }}
+          </li>
+        </ul>
+      </div>
+
+      <!-- Awards Section -->
+      <div class="mb-8">
+        <div class="text-4xl font-bold text-primary-dark">Awards</div>
+        <ul class="mt-4 text-2xl text-primary-gold">
+          <li *ngFor="let award of player.awards">{{ award }}</li>
+        </ul>
+      </div>
+
+      <!-- Social Media Followers Section -->
+      <div>
+        <div class="text-4xl font-bold text-primary-dark">Social Media Followers</div>
+        <div class="mt-4 text-2xl text-primary-dark">
+          <div><span class="font-bold">Instagram: </span> <span>{{ player.socialMediaFollowers.Instagram }}</span></div>
+          <div><span class="font-bold">Twitter: </span> <span>{{ player.socialMediaFollowers.Twitter }}</span></div>
+        </div>
+      </div>
+  </div>
+</div>

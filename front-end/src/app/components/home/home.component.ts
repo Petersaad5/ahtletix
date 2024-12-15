@@ -3,6 +3,7 @@ import { CarouselComponent } from '../carousel/carousel.component';
 import { SearchBarComponent } from '../search-bar/search-bar.component';
 import { FilterComponent } from '../filter/filter.component'; 
 
+
 @Component({
   selector: 'app-home',
   standalone: true,

@@ -117,11 +117,11 @@ app.get('/carouselSearch', async (req, res) => {
 
 
 app.get('/searchBar', async (req, res) => {
-    let input = req.query.input; // the input that the client wants to search for
+    let input = req.query.input; // the id of the entity that the client wants to search for
+    let typeOfSearch = req.query.typeOfSearch; // type of the entity that the client wants to search for
     let filters = req.query.filters; // the filters that the client wants to apply to the search
 
     // checking for the type of the input of the client to know waht to search for
-    let typeOfSearch = ''; // what the client wants to search for
     let typeQuery = `SELECT ?typeLabel WHERE {
     ?entity rdfs:label "${input}"@en .
 
@@ -364,34 +364,40 @@ app.get('/searchBar', async (req, res) => {
 
 app.get('/autoCompletion', async (req, res) => {
     let input = req.query.input; // the input that the client wants to search for
-    let query = `SELECT DISTINCT ?itemLabel ?item (COUNT(?claim) AS ?claimCount) WHERE {
-        # Perform the search using the mwapi service
-        SERVICE wikibase:mwapi {
-            bd:serviceParam wikibase:endpoint "www.wikidata.org";
-                            wikibase:api "EntitySearch";
-                            mwapi:search "Chicago";
-                            mwapi:language "fr".
-            ?item wikibase:apiOutputItem mwapi:item.
-        }
+    let query = `SELECT DISTINCT ?itemLabel ?item (COUNT(?claim) AS ?claimCount) ?matchType WHERE {
+    # Perform the search using the mwapi service
+    SERVICE wikibase:mwapi {
+        bd:serviceParam wikibase:endpoint "www.wikidata.org";
+                        wikibase:api "EntitySearch";
+                        mwapi:search "${input}";
+                        mwapi:language "fr".
+        ?item wikibase:apiOutputItem mwapi:item.
+    }
 
-        OPTIONAL { ?item wdt:P1447 ?athleteId. }  # Athlete (P1447)
-        OPTIONAL { # Team's sport (P641)
-            ?item wdt:P641 ?sport; 
-                  wdt:P31 ?type.
-            ?type rdfs:label ?typeLabel.
-            FILTER(LANG(?typeLabel) = "en").
-            FILTER regex(?typeLabel, "team|club", "i").    
-        }
+    OPTIONAL { # Athlete (P1447)
+        ?item wdt:P1447 ?athleteId. 
+    }  
+    OPTIONAL { # Team's sport (P641)
+        ?item wdt:P641 ?sport; 
+              wdt:P31 ?type.
+        ?type rdfs:label ?typeLabel.
+        FILTER(LANG(?typeLabel) = "en").
+        FILTER regex(?typeLabel, "team|club", "i").   
+    }
 
-        # Count the claims to rank by number of claims
-        ?item ?claim ?value.
-        FILTER(BOUND(?athleteId) || BOUND(?sport))  # At least one must be true
-        
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "fr". }
-        }
-        GROUP BY ?item ?itemLabel
-        ORDER BY DESC(?claimCount)  # Order by the number of claims (most popular based on claims)
-        LIMIT 10`;
+    # Count the claims to rank by the number of claims
+    ?item ?claim ?value.
+    FILTER(BOUND(?athleteId) || BOUND(?sport))  # At least one must be true
+
+    # BIND match type (athlete or team)
+    BIND(IF(BOUND(?athleteId), "athlete", IF(BOUND(?sport), "team", "unknown")) AS ?matchType)
+
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "fr". }
+    }
+    GROUP BY ?item ?itemLabel ?matchType
+    ORDER BY DESC(?claimCount)  # Order by the number of claims (most popular based on claims)
+    LIMIT 10
+`;
 
     // sending a request to the database
     const url = `${wikidataEndPoint}?query=${encodeURIComponent(query)}&format=json`;
@@ -406,7 +412,7 @@ app.get('/autoCompletion', async (req, res) => {
     let bindings = data.results.bindings;
     let retArray = [];
     for(let i in bindings) {
-        let json = {id: bindings[i].item.value, label: bindings[i].itemLabel.value};
+        let json = {id: bindings[i].item.value, label: bindings[i].itemLabel.value, matchType: bindings[i].matchType.value};
         retArray.push(json);
     }
 

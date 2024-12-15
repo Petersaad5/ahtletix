@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Information sur le Sport: Basketball</title>
+  <style>
+    /* TailwindCSS CDN (replace with local setup if necessary) */
+    @import url('https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css');
+  </style>
+</head>
+<body class="bg-neutral-light flex flex-col items-center min-h-screen">
+  <!-- Header Section -->
+  <div class="w-full text-center py-6 bg-primary-dark text-neutral-light">
+    <div class="text-5xl font-bold">Information sur le sport : {{ sport.label }}</div>
+    <div class="text-xl mt-2 italic">Origine : {{ sport.countryOfOrigin }}</div>
+  </div>
+
+  <!-- Main Content Section -->
+  <div class="flex flex-row w-full flex-grow">
+    <!-- Sport Image Section -->
+    <div class="w-1/2 flex items-center justify-center bg-neutral-light p-6">
+      <img src="{{ sport.image }}" alt="Image de {{ sport.label }}" class="w-2/3 h-auto object-contain rounded-lg shadow-lg" style="height: 50vh;">
+    </div>
+
+    <!-- Sport Info Section -->
+    <div class="w-1/2 flex flex-col justify-start p-12">
+      <div class="text-6xl font-black text-primary-dark">{{ sport.label }}</div>
+      <div class="text-3xl font-semibold text-primary-dark mt-4">
+        <span class="font-bold">Autorité :</span> {{ sport.authority }}
+      </div>
+      <div class="text-2xl font-medium text-primary-dark mt-6">
+        <span class="font-bold">Pays d'origine :</span> {{ sport.countryOfOrigin }}
+      </div>
+      <div class="text-2xl font-medium text-primary-dark">
+        <span class="font-bold">Inception :</span> {{ sport.insception | date: '1er MMMM yyyy' }}
+      </div>
+      <div class="text-2xl font-medium text-primary-dark">
+        <span class="font-bold">Joueurs maximum :</span> {{ sport.maxPlayers }}
+      </div>
+      <div class="text-2xl font-medium text-primary-dark">
+        <span class="font-bold">Joueurs minimum :</span> {{ sport.minPlayers }}
+      </div>
+      <div class="text-4xl mt-8">
+        <span class="text-neutral-dark">{{ sport.unicode }}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Additional Information Section -->
+  <div class="w-full p-8 bg-neutral-light">
+    <div class="max-w-6xl mx-auto">
+      <!-- Sport Icon Section -->
+      <div class="mb-8 flex justify-center items-center">
+        <div class="text-4xl font-bold text-primary-dark mr-4">Icône du sport :</div>
+        <img src="{{ sport.icon }}" alt="Icône du sport" class="h-20 w-auto object-contain">
+      </div>
+    </div>
+  </div>
+</body>
+</html>

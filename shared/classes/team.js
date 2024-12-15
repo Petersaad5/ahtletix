@@ -8,14 +8,14 @@ class Team {
         this.nickname = nickname; // P1449
         this.country = country; // P17
         this.sport = sport; // P641
-        this.sponsor = sponsor; // P859
+        this.sponsor = sponsor; // P859 array
         this.homeVenue = homeVenue; // P115
         this.league = league; // P118
         this.foundedBy = foundedBy; // P112
         this.headQuarters = headQuarters; // P159
         this.officialWebsite = officialWebsite; // P856
         this.kitSupplier = kitSupplier; // P5995
-        this.socialMediaFollowers = socialMediaFollowers; // P8687
+        this.socialMediaFollowers = socialMediaFollowers; // P8687 array
         this.coach = coach; // P286
     }   
 }

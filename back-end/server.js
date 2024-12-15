@@ -294,12 +294,22 @@ app.get('/searchBar', async (req, res) => {
             'deathDate' in bindings[0] ? bindings[0].deathDate.value : null,
             'placeOfBirthLabel' in bindings[0] ? bindings[0].placeOfBirthLabel.value : null,
             position,
-            teams,
+            teams, 
             awards,
             socialMediaFollowers,
             'nicknameLabel' in bindings[0] ? bindings[0].nicknameLabel.value : null
         );
     } else if(typeOfSearch === 'team') {
+        let sponsor = [];
+        let socialMediaFollowers = [];
+        for(let i in bindings) {
+            if('sponsorLabel' in bindings[i])
+                sponsor.push(bindings[i].sponsorLabel.value);
+            if ('socialMediaFollowers' in bindings[i])
+                socialMediaFollowers.push(bindings[i].socialMediaFollowers.value);
+        }
+        sponsor = [...new Set(sponsor)];
+        socialMediaFollowers = [...new Set(socialMediaFollowers)];
         object = new Team(
             'instanceOfLabel' in bindings[0] ? bindings[0].instanceOfLabel.value : null,
             'inception' in bindings[0] ? bindings[0].inception.value : null,
@@ -309,14 +319,14 @@ app.get('/searchBar', async (req, res) => {
             'nickname' in bindings[0] ? bindings[0].nickname.value : null,
             'countryLabel' in bindings[0] ? bindings[0].countryLabel.value : null,
             'sportLabel' in bindings[0] ? bindings[0].sportLabel.value : null,
-            'sponsorLabel' in bindings[0] ? bindings[0].sponsorLabel.value : null,
+            sponsor,
             'homeVenueLabel' in bindings[0] ? bindings[0].homeVenueLabel.value : null,
             'leagueLabel' in bindings[0] ? bindings[0].leagueLabel.value : null,
             'foundedByLabel' in bindings[0] ? bindings[0].foundedByLabel.value : null,
             'headQuartersLabel' in bindings[0] ? bindings[0].headQuartersLabel.value : null,
             'officialWebsite' in bindings[0] ? bindings[0].officialWebsite.value : null,
             'kitSupplierLabel' in bindings[0] ? bindings[0].kitSupplierLabel.value : null,
-            'socialMediaFollowers' in bindings[0] ? bindings[0].socialMediaFollowers.value : null,
+            socialMediaFollowers,
             'coachLabel' in bindings[0] ? bindings[0].coachLabel.value : null
         );
     }

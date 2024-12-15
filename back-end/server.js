@@ -121,110 +121,69 @@ app.get('/searchBar', async (req, res) => {
     let typeOfSearch = req.query.typeOfSearch; // type of the entity that the client wants to search for
     let filters = req.query.filters; // the filters that the client wants to apply to the search
 
-    // checking for the type of the input of the client to know waht to search for
-    let typeQuery = `SELECT ?typeLabel WHERE {
-    ?entity rdfs:label "${input}"@en .
-
-    # Get the type (class) of the entity
-    ?entity wdt:P31 ?type.
-
-    # Get the labels of the types
-    SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
-    }
-    `; 
-
-    // sending a request to the database
-    const urlType = `${wikidataEndPoint}?query=${encodeURIComponent(typeQuery)}&format=json`;
-    const responseType = await fetch(urlType, { method: 'GET', headers });
-    if (!responseType.ok) {
-        res.status(500).send('Failed to fetch data');
-        console.log('Failed to fetch data');
-        return;
-    }
-    
-    const dataType = await responseType.json();
-    // search all the bindings to see if it is a team or a human
-    let bidings = dataType.results.bindings;
-    for(let i in bidings) {
-        if(bidings[i].typeLabel.value.includes('human')) {
-            typeOfSearch = 'human';
-            break
-        } else if(bidings[i].typeLabel.value.includes('team') || bidings[i].typeLabel.value.includes('club')) {
-            typeOfSearch = 'team';
-            break;
-        } else {
-            res.status(400).send('Invalid input');
-            return;
-        }
-    }
-
     let query = '';
-    if(typeOfSearch === 'human') {
+    if(typeOfSearch === 'athlete') {
         query = `SELECT ?label ?image ?sportLabel ?genderLabel ?nationalityLabel ?height ?weight ?teamLabel ?signature 
         ?birthDate ?deathDate ?placeOfBirthLabel ?positionLabel ?teamsLabel ?awards ?socialMediaFollowers ?nicknameLabel
         WHERE {
     
-        # Find the entity by label (assuming a person/entity search)
-        ?entity rdfs:label "${input}"@en.
-
         # Retrieve the label of the entity
-        ?entity rdfs:label ?label. FILTER (LANG(?label) = "en").
+        ${input} rdfs:label ?label. FILTER (LANG(?label) = "fr").
         
         # Retrieve the sport
-        OPTIONAL { ?entity wdt:P641 ?sport. }
+        OPTIONAL { ${input} wdt:P641 ?sport. }
         
         # Retrieve the age (often birthdate related, P569)
-        OPTIONAL { ?entity wdt:P569 ?birthDate. }
+        OPTIONAL { ${input} wdt:P569 ?birthDate. }
         
         # Retrieve gender (P21)
-        OPTIONAL { ?entity wdt:P21 ?gender. }
+        OPTIONAL { ${input} wdt:P21 ?gender. }
         
         # Retrieve nationality (P27)
-        OPTIONAL { ?entity wdt:P27 ?nationality. }
+        OPTIONAL { ${input} wdt:P27 ?nationality. }
         
         # Retrieve height (P2048)
-        OPTIONAL { ?entity wdt:P2048 ?height. }
+        OPTIONAL { ${input} wdt:P2048 ?height. }
         
         # Retrieve weight (P2067)
-        OPTIONAL { ?entity wdt:P2067 ?weight. }
+        OPTIONAL { ${input} wdt:P2067 ?weight. }
         
         # Retrieve the team (P54)
-        OPTIONAL { ?entity wdt:P54 ?team. }
+        OPTIONAL { ${input} wdt:P54 ?team. }
         
         # Retrieve image (P18)
-        OPTIONAL { ?entity wdt:P18 ?image. }
+        OPTIONAL { ${input} wdt:P18 ?image. }
         
         # Retrieve signature (P109)
-        OPTIONAL { ?entity wdt:P109 ?signature. }
+        OPTIONAL { ${input} wdt:P109 ?signature. }
         
         # Retrieve the birth date (P569)
-        OPTIONAL { ?entity wdt:P569 ?birthDate. }
+        OPTIONAL { ${input} wdt:P569 ?birthDate. }
         
         # Retrieve the death date (P570)
-        OPTIONAL { ?entity wdt:P570 ?deathDate. }
+        OPTIONAL { ${input} wdt:P570 ?deathDate. }
         
         # Retrieve the place of birth (P19)
-        OPTIONAL { ?entity wdt:P19 ?placeOfBirth. }
+        OPTIONAL { ${input} wdt:P19 ?placeOfBirth. }
         
         # Retrieve the position (P413)
-        OPTIONAL { ?entity wdt:P413 ?position. }
+        OPTIONAL { ${input} wdt:P413 ?position. }
         
         # Retrieve teams (P54)
-        OPTIONAL { ?entity wdt:P54 ?teams. }
+        OPTIONAL { ${input} wdt:P54 ?teams. }
         
         # Retrieve awards (P166)
-        OPTIONAL { ?entity wdt:P166 ?awards. }
+        OPTIONAL { ${input} wdt:P166 ?awards. }
         
         # Retrieve social media followers (P8687)
-        OPTIONAL { ?entity wdt:P8687 ?socialMediaFollowers. }
+        OPTIONAL { ${input} wdt:P8687 ?socialMediaFollowers. }
         
         # Retrieve nickname (P1449)
-        OPTIONAL { ?entity wdt:P1449 ?nickname. }
+        OPTIONAL { ${input} wdt:P1449 ?nickname. }
 
         # Fetch labels for related entities
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "fr". }
     }
-    LIMIT 1
     `;
     } else if(typeOfSearch === 'team') {
         query = `SELECT ?label ?instanceOfLabel ?inception ?image ?logo ?nickname ?countryLabel ?sportLabel ?sponsorLabel 
@@ -317,7 +276,7 @@ app.get('/searchBar', async (req, res) => {
     const dataObjet = await responseObject.json(); 
     let binding = dataObjet.results.bindings[0];
     let object = null; 
-    if(typeOfSearch === 'human') {
+    if(typeOfSearch === 'athlete') {
         object = new Athlete(
             'label' in binding ? binding.label.value : null,
             'sportLabel' in binding ? binding.sportLabel.value : null,
@@ -412,7 +371,7 @@ app.get('/autoCompletion', async (req, res) => {
     let bindings = data.results.bindings;
     let retArray = [];
     for(let i in bindings) {
-        let json = {id: bindings[i].item.value, label: bindings[i].itemLabel.value, matchType: bindings[i].matchType.value};
+        let json = {id: "wd:" + bindings[i].item.value.split('/').pop(), label: bindings[i].itemLabel.value, matchType: bindings[i].matchType.value};
         retArray.push(json);
     }
 

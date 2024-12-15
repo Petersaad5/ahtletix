@@ -124,8 +124,8 @@ app.get('/searchBar', async (req, res) => {
 
     let query = '';
     if(typeOfSearch === 'athlete') {
-        query = `SELECT ?label ?image ?sportLabel ?genderLabel ?nationalityLabel ?height ?weight ?teamLabel ?signature 
-        ?birthDate ?deathDate ?placeOfBirthLabel ?positionLabel ?teamsLabel ?awards ?socialMediaFollowers ?nicknameLabel
+        query = `SELECT ?label ?image ?sportLabel ?genderLabel ?nationalityLabel ?height ?weight ?signature 
+        ?birthDate ?deathDate ?placeOfBirthLabel ?positionLabel ?teamsLabel ?awardsLabel ?socialMediaFollowers ?nicknameLabel
         WHERE {
     
         # Retrieve the label of the entity
@@ -148,9 +148,6 @@ app.get('/searchBar', async (req, res) => {
         
         # Retrieve weight (P2067)
         OPTIONAL { ${input} wdt:P2067 ?weight. }
-        
-        # Retrieve the team (P54)
-        OPTIONAL { ${input} wdt:P54 ?team. }
         
         # Retrieve image (P18)
         OPTIONAL { ${input} wdt:P18 ?image. }
@@ -260,50 +257,70 @@ app.get('/searchBar', async (req, res) => {
     }
 
     const dataObjet = await responseObject.json(); 
-    let binding = dataObjet.results.bindings[0];
+    let bindings = dataObjet.results.bindings;
     let object = null; 
     if(typeOfSearch === 'athlete') {
+        let teams = [];
+        let awards = [];
+        let socialMediaFollowers = [];
+        let position = [];
+        for(let i in bindings) {
+            if('teamsLabel' in bindings[i]) 
+                teams.push(bindings[i].teamsLabel.value);
+            
+            if('awardsLabel' in bindings[i]) 
+                awards.push(bindings[i].awardsLabel.value);
+            
+            if('socialMediaFollowers' in bindings[i]) 
+                socialMediaFollowers.push(bindings[i].socialMediaFollowers.value);
+
+            if('positionLabel' in bindings[i])
+                position.push(bindings[i].positionLabel.value);
+        }
+        teams = [...new Set(teams)];
+        awards = [...new Set(awards)];
+        socialMediaFollowers = [...new Set(socialMediaFollowers)];
+        position = [...new Set(position)];
         object = new Athlete(
-            'label' in binding ? binding.label.value : null,
-            'sportLabel' in binding ? binding.sportLabel.value : null,
-            'genderLabel' in binding ? binding.genderLabel.value : null,
-            'nationalityLabel' in binding ? binding.nationalityLabel.value : null,
-            'height' in binding ? binding.height.value : null,
-            'weight' in binding ? binding.weight.value : null,
-            'teamLabel' in binding ? binding.teamLabel.value : null,
-            'image' in binding ? binding.image.value : null,
-            'signature' in binding ? binding.signature.value : null,
-            'birthDate' in binding ? binding.birthDate.value : null,
-            'deathDate' in binding ? binding.deathDate.value : null,
-            'placeOfBirthLabel' in binding ? binding.placeOfBirthLabel.value : null,
-            'positionLabel' in binding ? binding.positionLabel.value : null,
-            'teamsLabel' in binding ? binding.teamsLabel.value : null,
-            'awards' in binding ? binding.awards.value : null,
-            'socialMediaFollowers' in binding ? binding.socialMediaFollowers.value : null,
-            'nicknameLabel' in binding ? binding.nicknameLabel.value : null
+            'label' in bindings[0] ? bindings[0].label.value : null,
+            'sportLabel' in bindings[0] ? bindings[0].sportLabel.value : null,
+            'genderLabel' in bindings[0] ? bindings[0].genderLabel.value : null,
+            'nationalityLabel' in bindings[0] ? bindings[0].nationalityLabel.value : null,
+            'height' in bindings[0] ? bindings[0].height.value : null,
+            'weight' in bindings[0] ? bindings[0].weight.value : null,
+            'image' in bindings[0] ? bindings[0].image.value : null,
+            'signature' in bindings[0] ? bindings[0].signature.value : null,
+            'birthDate' in bindings[0] ? bindings[0].birthDate.value : null,
+            'deathDate' in bindings[0] ? bindings[0].deathDate.value : null,
+            'placeOfBirthLabel' in bindings[0] ? bindings[0].placeOfBirthLabel.value : null,
+            position,
+            teams,
+            awards,
+            socialMediaFollowers,
+            'nicknameLabel' in bindings[0] ? bindings[0].nicknameLabel.value : null
         );
     } else if(typeOfSearch === 'team') {
         object = new Team(
-            'instanceOfLabel' in binding ? binding.instanceOfLabel.value : null,
-            'inception' in binding ? binding.inception.value : null,
-            'label' in binding ? binding.label.value : null,
-            'image' in binding ? binding.image.value : null,
-            'logo' in binding ? binding.logo.value : null,
-            'nickname' in binding ? binding.nickname.value : null,
-            'countryLabel' in binding ? binding.countryLabel.value : null,
-            'sportLabel' in binding ? binding.sportLabel.value : null,
-            'sponsorLabel' in binding ? binding.sponsorLabel.value : null,
-            'homeVenueLabel' in binding ? binding.homeVenueLabel.value : null,
-            'leagueLabel' in binding ? binding.leagueLabel.value : null,
-            'foundedByLabel' in binding ? binding.foundedByLabel.value : null,
-            'headQuartersLabel' in binding ? binding.headQuartersLabel.value : null,
-            'officialWebsite' in binding ? binding.officialWebsite.value : null,
-            'kitSupplierLabel' in binding ? binding.kitSupplierLabel.value : null,
-            'socialMediaFollowers' in binding ? binding.socialMediaFollowers.value : null,
-            'coachLabel' in binding ? binding.coachLabel.value : null
+            'instanceOfLabel' in bindings[0] ? bindings[0].instanceOfLabel.value : null,
+            'inception' in bindings[0] ? bindings[0].inception.value : null,
+            'label' in bindings[0] ? bindings[0].label.value : null,
+            'image' in bindings[0] ? bindings[0].image.value : null,
+            'logo' in bindings[0] ? bindings[0].logo.value : null,
+            'nickname' in bindings[0] ? bindings[0].nickname.value : null,
+            'countryLabel' in bindings[0] ? bindings[0].countryLabel.value : null,
+            'sportLabel' in bindings[0] ? bindings[0].sportLabel.value : null,
+            'sponsorLabel' in bindings[0] ? bindings[0].sponsorLabel.value : null,
+            'homeVenueLabel' in bindings[0] ? bindings[0].homeVenueLabel.value : null,
+            'leagueLabel' in bindings[0] ? bindings[0].leagueLabel.value : null,
+            'foundedByLabel' in bindings[0] ? bindings[0].foundedByLabel.value : null,
+            'headQuartersLabel' in bindings[0] ? bindings[0].headQuartersLabel.value : null,
+            'officialWebsite' in bindings[0] ? bindings[0].officialWebsite.value : null,
+            'kitSupplierLabel' in bindings[0] ? bindings[0].kitSupplierLabel.value : null,
+            'socialMediaFollowers' in bindings[0] ? bindings[0].socialMediaFollowers.value : null,
+            'coachLabel' in bindings[0] ? bindings[0].coachLabel.value : null
         );
     }
-    console.log(object);
+    console.log(query);
     res.send({typeOfSearch, object});
 });
 

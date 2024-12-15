@@ -1,0 +1,41 @@
+{
+  "name": "Lionel Messi",
+  "sport": "Football",
+  "age": 36,
+  "gender": "Male",
+  "nationality": "Argentinian",
+  "height": "170 cm",
+  "weight": "72 kg",
+  "team": "Inter Miami CF",
+  "image": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Lionel-Messi-Argentina-2022-FIFA-World-Cup_%28cropped%29.jpg",
+  "signature": "https://upload.wikimedia.org/wikipedia/commons/6/63/Firma_de_Lionel_Messi.svg",
+  "information": "Considered one of the greatest football players of all time.",
+  "birthDate": "1987-06-24",
+  "deathDate": null,
+  "placeOfBirth": "Rosario, Argentina",
+  "position": "Forward",
+  "teams": [
+    {
+      "name": "Barcelona",
+      "years": "2000-2021"
+    },
+    {
+      "name": "Paris Saint-Germain",
+      "years": "2021-2023"
+    },
+    {
+      "name": "Inter Miami CF",
+      "years": "2023-present"
+    }
+  ],
+  "awards": [
+    "Ballon d'Or 2023",
+    "FIFA World Cup Golden Ball 2022",
+    "UEFA Men's Player of the Year 2015"
+  ],
+  "socialMediaFollowers": {
+    "Instagram": 450000000,
+    "Twitter": 150000000
+  },
+  "nickname": "La Pulga"
+}

@@ -1,0 +1,23 @@
+{
+    "instanceOf": "Football Club", 
+    "inception": "1899-03-15T00:00:00Z", 
+    "label": "FC Barcelona", 
+    "image": "https://upload.wikimedia.org/wikipedia/commons/5/56/2015_UEFA_Super_Cup_67.jpg", 
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/0/02/034_Ciutat_Esportiva_Joan_Gamper%2C_Futbol_Club_Barcelona_%28Sant_Joan_Desp%C3%AD%29_%28cropped%29.jpg",
+    "nickname": "Barça", 
+    "country": "Spain", 
+    "sport": "Association Football", 
+    "sponsor": "Spotify", 
+    "homeVenue": "Camp Nou", 
+    "league": "La Liga", 
+    "foundedBy": "Joan Gamper", 
+    "headQuarters": "Barcelona, Catalonia, Spain", 
+    "officialWebsite": "https:fcbarcelona.com", 
+    "kitSupplier": "Nike", 
+    "socialMediaFollowers": {
+      "Instagram": 120000000,
+      "Twitter": 40000000,
+      "Facebook": 110000000
+    },
+    "coach": "Xavi Hernández" 
+  }

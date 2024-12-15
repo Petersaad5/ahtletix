@@ -10,6 +10,7 @@ module.exports = {
           DEFAULT: "#0D1F4B", // Dark blue from the logo
           light: "#122b6d", // Slightly lighter blue
           dark: "#0A1736", // Very dark blue for accents
+          gold: "#ffb21f", // Gold
         },
         secondary: {
           DEFAULT: "#FF6A00", // Orange from the logo

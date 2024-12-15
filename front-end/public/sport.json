@@ -1,0 +1,11 @@
+{
+    "label": "basketball",
+    "image": "http://commons.wikimedia.org/wiki/Special:FilePath/Three%20point%20shoot.JPG",
+    "insception": "1891-12-01T00:00:00Z",
+    "authority": "FIBA",
+    "countryOfOrigin": "United States of America",
+    "icon": "http://commons.wikimedia.org/wiki/Special:FilePath/Basketball%20pictogram.svg",
+    "unicode": "🏀",
+    "maxPlayers": "5",
+    "minPlayers": "2"
+} 

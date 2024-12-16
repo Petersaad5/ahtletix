@@ -46,16 +46,16 @@ export class SearchBarComponent {
   autocompleteLoad(input: string) {
     if (input.length > 2) {
       this.getFilters(); // initialize filters in the component
-      let filters = {
-        sports: this.sportsFilters,
-        countries: this.countriesFilters,
-      };
+  
+      let sports = this.sportsFilters.join(',');
+      let countries = this.countriesFilters.join(',');
 
       // Send API call to the backend
       this.http.get<SearchResult[]>(`${this.backendUrl}/autoCompletion`, {
         params: { 
           input : input, 
-          filters : JSON.stringify(filters)
+          sports : sports,
+          countries : countries
         } 
       }).subscribe((data: SearchResult[]) => {
         this.autocompleteDisplay = true;

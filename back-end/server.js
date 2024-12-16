@@ -280,7 +280,6 @@ app.get('/searchBar', async (req, res) => {
         awards = [...new Set(awards)];
         socialMediaFollowers = [...new Set(socialMediaFollowers)];
         position = [...new Set(position)];
-
         object = new Athlete(
             'label' in bindings[0] ? bindings[0].label.value : null,
             'sportLabel' in bindings[0] ? bindings[0].sportLabel.value : null,
@@ -343,10 +342,10 @@ app.get('/autoCompletion', async (req, res) => {
                         mwapi:search "${input}";
                         mwapi:language "fr".
         ?item wikibase:apiOutputItem mwapi:item.
-    }
+    } 
 
     OPTIONAL { # Athlete (P1447)
-        ?item wdt:P1447 ?athleteId. 
+        ?item wdt:P5815 ?athleteId. 
     }  
     OPTIONAL { # Team's sport (P641)
         ?item wdt:P641 ?sport; 

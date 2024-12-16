@@ -3,11 +3,14 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { SearchService } from '../../services/search.service';
 import { SharedDataService } from '../../services/shared-data.service';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { SearchResult } from '../../search-result';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-search-bar',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, HttpClientModule],
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.css'],
 })
@@ -15,13 +18,17 @@ export class SearchBarComponent implements OnInit {
   searchKeyWords: string = '';
   athleteData: any = null;
   error: string = '';
-
+  autocompleteDisplay: boolean = false; 
+  suggestions: SearchResult[] = [];
   sportsFilters: string[] = [];
   countriesFilters: string[] = [];
+  private backendUrl = 'http://localhost:3000';
 
   constructor(
     private searchService: SearchService,
-    private sharedDataService: SharedDataService
+    private sharedDataService: SharedDataService, 
+    private http : HttpClient, 
+    private router : Router
   ) {}
 
   ngOnInit() {
@@ -31,6 +38,7 @@ export class SearchBarComponent implements OnInit {
     this.sharedDataService.countriesFilters$.subscribe((filters) => {
       this.countriesFilters = filters;
     });
+    this.autocompleteDisplay = false; 
   }
 
   search() {
@@ -58,4 +66,33 @@ export class SearchBarComponent implements OnInit {
       },
     });
   }
+
+  // TODO un api annule le call d'avant
+  autocompleteLoad(input: string) {
+    if (input.length > 2) {
+      console.log(input);
+  
+      // Send API call to the backend
+      this.http.get<SearchResult[]>(`${this.backendUrl}/autoCompletion`, {
+        params: { input } // send the filters as well
+      }).subscribe((data: SearchResult[]) => {
+        this.autocompleteDisplay = true;
+        this.suggestions = data;
+      });
+    } else {
+      this.autocompleteDisplay = false;
+    }
+  }
+
+  loadInformationPage(suggestion : SearchResult) {
+    // Send API call to the backend
+    this.http.get(`${this.backendUrl}/searchBar`, {
+      params : { input : suggestion.id, typeOfSearch : suggestion.matchType }
+    }).subscribe((data) => {
+      this.sharedDataService.sendInformation(data);
+      console.log(data);
+      this.router.navigate([`/${suggestion.matchType}`]);
+    });
+  }
+  
 }

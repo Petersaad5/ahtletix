@@ -17,7 +17,6 @@ export class SportPageComponent implements OnInit {
   ngOnInit(): void {
     this.sharedDataService.sportCarousel$.subscribe((data) => {
       this.sport = data;
-      console.log(this.sport);
     });
   }
 }

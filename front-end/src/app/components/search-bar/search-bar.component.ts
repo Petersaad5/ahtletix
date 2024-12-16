@@ -18,7 +18,7 @@ export class SearchBarComponent {
   searchKeyWords: string = '';
   athleteData: any = null;
   error: string = '';
-  autocompleteDisplay: boolean = false; 
+  autocompleteDisplay: boolean = false;
   suggestions: SearchResult[] = [];
   playerSuggestions: SearchResult[] = [];
   teamSuggestions: SearchResult[] = [];
@@ -28,9 +28,9 @@ export class SearchBarComponent {
 
   constructor(
     private searchService: SearchService,
-    private sharedDataService: SharedDataService, 
-    private http : HttpClient, 
-    private router : Router
+    private sharedDataService: SharedDataService,
+    private http: HttpClient,
+    private router: Router
   ) {}
 
   getFilters() {
@@ -42,39 +42,45 @@ export class SearchBarComponent {
     });
   }
 
-
   autocompleteLoad(input: string) {
     if (input.length > 2) {
       this.getFilters(); // initialize filters in the component
-      let filters = {
-        sports: this.sportsFilters,
-        countries: this.countriesFilters,
-      };
+      let sports = this.sportsFilters.join(',');
+      let countries = this.countriesFilters.join(',');
 
       // Send API call to the backend
-      this.http.get<SearchResult[]>(`${this.backendUrl}/autoCompletion`, {
-        params: { 
-          input : input, 
-          filters : JSON.stringify(filters)
-        } 
-      }).subscribe((data: SearchResult[]) => {
-        this.autocompleteDisplay = true;
-        this.suggestions = data;
-        this.playerSuggestions = data.filter(suggestion => suggestion.matchType === 'athlete');
-        this.teamSuggestions = data.filter(suggestion => suggestion.matchType === 'team');
-      });
+      this.http
+        .get<SearchResult[]>(`${this.backendUrl}/autoCompletion`, {
+          params: {
+            input: input,
+            sports: sports,
+            countries: countries,
+          },
+        })
+        .subscribe((data: SearchResult[]) => {
+          this.autocompleteDisplay = true;
+          this.suggestions = data;
+          this.playerSuggestions = data.filter(
+            (suggestion) => suggestion.matchType === 'athlete'
+          );
+          this.teamSuggestions = data.filter(
+            (suggestion) => suggestion.matchType === 'team'
+          );
+        });
     } else {
       this.autocompleteDisplay = false;
     }
   }
 
-  loadInformationPage(suggestion : SearchResult) {
+  loadInformationPage(suggestion: SearchResult) {
     // Send API call to the backend
-    this.http.get(`${this.backendUrl}/searchBar`, {
-      params : { input : suggestion.id, typeOfSearch : suggestion.matchType }
-    }).subscribe((data) => {
-      this.sharedDataService.sendInformation(data);
-      this.router.navigate([`/${suggestion.matchType}`]);
-    });
+    this.http
+      .get(`${this.backendUrl}/searchBar`, {
+        params: { input: suggestion.id, typeOfSearch: suggestion.matchType },
+      })
+      .subscribe((data) => {
+        this.sharedDataService.sendInformation(data);
+        this.router.navigate([`/${suggestion.matchType}`]);
+      });
   }
 }

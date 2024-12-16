@@ -18,12 +18,12 @@
           filterType === 'country'
             ? 'Rechercher un pays'
             : 'Rechercher un sport'
-        " [(ngModel)]="filterSearch" class="input input-bordered bg-primary-dark text-white w-full"
+        " [(ngModel)]="filterSearch" class="input input-bordered bg-primary-light text-white w-full"
         style="width: 250px" />
 
       <!-- Filtered Countries -->
       <ul *ngIf="filterType === 'country' && filteredCountries.length > 0"
-        class="menu bg-primary-dark rounded shadow-lg w-full absolute top-10 left-0 z-10" style="
+        class="menu bg-primary-light rounded shadow-lg w-full absolute top-10 left-0 z-10" style="
           max-height: 100px;
           overflow-y: auto;
           overflow-x: hidden;
@@ -45,7 +45,7 @@
           display: block;
           border: 1px solid #ddd;
         ">
-        <li *ngFor="let sport of filteredSports" class="text-white hover:bg-secondary-light cursor-pointer"
+        <li *ngFor="let sport of filteredSports" class="text-white hover:bg-secondary-dark cursor-pointer"
           (click)="selectSport(sport)">
           {{ sport }}
         </li>

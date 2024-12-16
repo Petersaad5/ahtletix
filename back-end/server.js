@@ -359,6 +359,14 @@ app.get("/autoCompletion", async (req, res) => {
   const sports = req.query.sports?.split(",").map((s) => s.trim()) || [];
   const countries = req.query.countries?.split(",").map((c) => c.trim()) || [];
 
+  //   const input = req.query.input || ""; // Keyword for search (e.g., "Michael")
+  //   const sports = req.query.filters.sports;
+  //   const countries = req.query.filters.countries;
+
+  console.log("input", input);
+  console.log("sports", sports);
+  console.log("countries", countries);
+
   // Define mappings for sports and countries
   const sportMapping = {
     Aviron: "Q350525", // Rowing

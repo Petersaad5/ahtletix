@@ -10,15 +10,6 @@ const PORT = 3000;
 // API call settings
 const wikidataEndPoint = 'https://query.wikidata.org/sparql';
 const headers = {
-    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-    'Accept-Encoding': 'gzip, deflate, br',
-    'Accept-Language': 'en-GB,en;q=0.9',
-    'Connection': 'keep-alive',
-    'Cookie': 'GeoIP=FR:ARA:Villeurbanne:45.77:4.89:v4; WMF-Last-Access-Global=14-Dec-2024',
-    'Host': 'query.wikidata.org',
-    'Sec-Fetch-Dest': 'document',
-    'Sec-Fetch-Mode': 'navigate',
-    'Sec-Fetch-Site': 'none',
     'User-Agent': 'Mozilla/5.0 (compatible; GenericBrowser/1.0;'
 };
 

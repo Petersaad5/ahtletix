@@ -21,7 +21,6 @@ export class CarouselComponent {
     }).subscribe((data) => {
       this.sharedDataService.sendSportCarousel(data);
       this.router.navigate(['/sport']);
-      console.log(data);
     });
   }
 }

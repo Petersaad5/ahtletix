@@ -1,4 +1,12 @@
 <div class="flex items-center space-x-2 w-full">
-  <input id='searchInput' type="text" [(ngModel)]="searchKeyWords" placeholder="Rechercher athlètes ou équipes" class="input input-bordered w-full w-max-md bg-primary-light text-white
+  <input #searchInput (input)="autocompleteLoad(searchInput.value)" type="text" [(ngModel)]="searchKeyWords"
+    placeholder="Rechercher athlètes ou équipes" class="input input-bordered w-full w-max-md bg-primary-light text-white
 " />
+  <div id="autocomplete" *ngIf="autocompleteDisplay">
+    <ul>
+      <li *ngFor="let suggestion of suggestions">
+        <button (click)="loadInformationPage(suggestion)">{{ suggestion.label }}</button>
+      </li>
+    </ul>
+  </div>
 </div>

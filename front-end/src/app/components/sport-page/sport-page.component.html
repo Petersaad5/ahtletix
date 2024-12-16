@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html lang="fr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +9,7 @@
 </head>
 <body class="bg-neutral-light flex flex-col items-center min-h-screen">
   <!-- Header Section -->
-  <div class="w-full text-center py-6 bg-primary-dark text-neutral-light">
+  <div class="w-full text-center py-6 bg-primary-light text-neutral-light">
     <div class="text-5xl font-bold">Information sur le sport : {{ sport.label }}</div>
     <div class="text-xl mt-2 italic">Origine : {{ sport.countryOfOrigin }}</div>
   </div>
@@ -25,24 +23,24 @@
 
     <!-- Sport Info Section -->
     <div class="w-1/2 flex flex-col justify-start p-12">
-      <div class="text-6xl font-black text-primary-dark">{{ sport.label }}</div>
-      <div class="text-3xl font-semibold text-primary-dark mt-4">
+      <div class="text-6xl font-black text-primary-light">{{ sport.label }}</div>
+      <div class="text-3xl font-semibold text-primary-light mt-4">
         <span class="font-bold">Autorité :</span> {{ sport.authority }}
       </div>
-      <div class="text-2xl font-medium text-primary-dark mt-6">
+      <div class="text-2xl font-medium text-primary-light mt-6">
         <span class="font-bold">Pays d'origine :</span> {{ sport.countryOfOrigin }}
       </div>
-      <div class="text-2xl font-medium text-primary-dark">
+      <div class="text-2xl font-medium text-primary-light">
         <span class="font-bold">Inception :</span> {{ sport.insception | date: '1er MMMM yyyy' }}
       </div>
-      <div class="text-2xl font-medium text-primary-dark">
+      <div class="text-2xl font-medium text-primary-light">
         <span class="font-bold">Joueurs maximum :</span> {{ sport.maxPlayers }}
       </div>
-      <div class="text-2xl font-medium text-primary-dark">
+      <div class="text-2xl font-medium text-primary-light">
         <span class="font-bold">Joueurs minimum :</span> {{ sport.minPlayers }}
       </div>
       <div class="text-4xl mt-8">
-        <span class="text-neutral-dark">{{ sport.unicode }}</span>
+        <span class="text-neutral-lighttext-primary-light">{{ sport.unicode }}</span>
       </div>
     </div>
   </div>
@@ -52,10 +50,9 @@
     <div class="max-w-6xl mx-auto">
       <!-- Sport Icon Section -->
       <div class="mb-8 flex justify-center items-center">
-        <div class="text-4xl font-bold text-primary-dark mr-4">Icône du sport :</div>
+        <div class="text-4xl font-bold text-primary-light mr-4">Icône du sport :</div>
         <img src="{{ sport.icon }}" alt="Icône du sport" class="h-20 w-auto object-contain">
       </div>
     </div>
   </div>
 </body>
-</html>

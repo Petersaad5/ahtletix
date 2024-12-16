@@ -9,14 +9,17 @@
   <div class="flex flex-row w-full flex-grow">
     <!-- Section de l'image du joueur -->
     <div class="w-1/2 flex items-center justify-center bg-neutral-light p-6">
-      <img [src]="player.image" alt="{{ player.name }}" class="w-2/3 h-auto object-contain rounded-lg shadow-lg" style="height: 50vh;">
+      <img [src]="player.image" alt="{{ player.name }}" class="w-2/3 h-auto object-contain rounded-lg shadow-lg"
+        style="height: 50vh;">
     </div>
 
     <!-- Section des informations sur le joueur -->
     <div class="w-1/2 flex flex-col justify-start p-12">
       <div class="text-6xl font-black text-primary-light">{{ player.name }}</div>
-      <div *ngIf="player.name" class="text-3xl font-semibold text-primary-light mt-4">{{ player.position.join(', ') }}</div>      <div class="text-3xl font-semibold text-primary-light">{{ player.team }}</div>
-      
+      <div *ngIf="player.name" class="text-3xl font-semibold text-primary-light mt-4">{{ player.position.join(', ') }}
+      </div>
+      <div class="text-3xl font-semibold text-primary-light">{{ player.team }}</div>
+
       <div class="text-2xl font-medium text-primary-light mt-6">
         <span *ngIf="player.height" class="font-bold">Taille :</span> {{ player.height }} cm
       </div>
@@ -43,11 +46,13 @@
       <div class="mb-8">
         <div class="text-4xl font-bold text-primary-light">Équipes</div>
         <ul class="mt-4 text-2xl text-primary-light">
-            <li *ngFor="let team of player.teams">
-                <span class="text-primary-light">{{ team }}</span>
-            </li>
+          <li *ngFor="let team of player.teams">
+            <button (click)="redirectToTeamPage(team.teamId)" class="hover:underline">
+              <span class="text-primary-light">{{ team.teamName }}</span>
+            </button>
+          </li>
         </ul>
-    </div>
+      </div>
 
       <!-- Section des récompenses -->
       <div class="mb-8">
@@ -60,15 +65,15 @@
       <!-- Section des abonnés sur les réseaux sociaux -->
       <div>
         <div class="text-4xl font-bold text-primary-light">Abonnés sur les réseaux sociaux</div>
-         <div class="mt-4 text-2xl text-primary-light">
-            <div *ngIf="player.socialMediaFollowers[0]">
-                <span class="font-bold text-primary-light">Instagram : </span> 
-                <span>{{ player.socialMediaFollowers[0] }}</span>
-            </div>
-            <div *ngIf="player.socialMediaFollowers[1]">
-                <span class="font-bold text-primary-light">Twitter : </span> 
-                <span>{{ player.socialMediaFollowers[1] }}</span>
-            </div>
+        <div class="mt-4 text-2xl text-primary-light">
+          <div *ngIf="player.socialMediaFollowers[0]">
+            <span class="font-bold text-primary-light">Instagram : </span>
+            <span>{{ player.socialMediaFollowers[0] }}</span>
+          </div>
+          <div *ngIf="player.socialMediaFollowers[1]">
+            <span class="font-bold text-primary-light">Twitter : </span>
+            <span>{{ player.socialMediaFollowers[1] }}</span>
+          </div>
         </div>
       </div>
     </div>

@@ -91,7 +91,6 @@ export class SearchBarComponent implements OnInit {
       params : { input : suggestion.id, typeOfSearch : suggestion.matchType }
     }).subscribe((data) => {
       this.sharedDataService.sendInformation(data);
-      console.log(data);
       this.router.navigate([`/${suggestion.matchType}`]);
     });
   }

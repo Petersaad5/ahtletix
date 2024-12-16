@@ -116,7 +116,7 @@ app.get('/searchBar', async (req, res) => {
     let query = '';
     if(typeOfSearch === 'athlete') {
         query = `SELECT ?label ?image ?sportLabel ?genderLabel ?nationalityLabel ?height ?weight ?signature 
-        ?birthDate ?deathDate ?placeOfBirthLabel ?positionLabel ?teamsLabel ?awardsLabel ?socialMediaFollowers ?nicknameLabel
+        ?birthDate ?deathDate ?placeOfBirthLabel ?positionLabel ?teams ?teamsLabel ?awardsLabel ?socialMediaFollowers ?nicknameLabel
         WHERE {
     
         # Retrieve the label of the entity
@@ -239,7 +239,6 @@ app.get('/searchBar', async (req, res) => {
 
     // sending a request to the database
     const urlObject = `${wikidataEndPoint}?query=${encodeURIComponent(query)}&format=json`;
-    console.log(urlObject);
     const responseObject = await fetch(urlObject, { method: 'GET', headers });
     if (!responseObject.ok) {
         res.status(500).send('Failed to fetch data');
@@ -251,14 +250,16 @@ app.get('/searchBar', async (req, res) => {
     let bindings = dataObjet.results.bindings;
     let object = null; 
     if(typeOfSearch === 'athlete') {
-        let teams = [];
+        let teamsID = [];
+        let teamsNames = [];
         let awards = [];
         let socialMediaFollowers = [];
         let position = [];
         for(let i in bindings) {
-            if('teamsLabel' in bindings[i]) 
-                teams.push(bindings[i].teamsLabel.value);
-            
+            if('teamsLabel' in bindings[i] && 'teams' in bindings[i]) {
+                teamsNames.push(bindings[i].teamsLabel.value);
+                teamsID.push('wd:' + bindings[i].teams.value.split('/').pop());
+            }
             if('awardsLabel' in bindings[i]) 
                 awards.push(bindings[i].awardsLabel.value);
             
@@ -268,7 +269,14 @@ app.get('/searchBar', async (req, res) => {
             if('positionLabel' in bindings[i])
                 position.push(bindings[i].positionLabel.value);
         }
-        teams = [...new Set(teams)];
+        teamsID = [...new Set(teamsID)];
+        teamsNames = [...new Set(teamsNames)];
+        // merge the sets into one array with json obejcts
+        let teams = [];
+        for(let i in teamsID) {
+            let json = {teamId: teamsID[i], teamName: teamsNames[i]};
+            teams.push(json);
+        }
         awards = [...new Set(awards)];
         socialMediaFollowers = [...new Set(socialMediaFollowers)];
         position = [...new Set(position)];
@@ -322,7 +330,6 @@ app.get('/searchBar', async (req, res) => {
             'coachLabel' in bindings[0] ? bindings[0].coachLabel.value : null
         );
     }
-    console.log(query);
     res.send({typeOfSearch, object});
 });
 

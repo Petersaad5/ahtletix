@@ -9,7 +9,8 @@
   <div class="flex flex-row w-full flex-grow">
     <!-- Section de l'image de l'équipe -->
     <div class="w-1/2 flex items-center justify-center bg-neutral-light p-6">
-      <img *ngIf="team.image" [src]="team.image" alt="{{ team.label }}" class="w-2/3 h-auto object-contain rounded-lg shadow-lg" style="height: 50vh;">
+      <img *ngIf="team.image" [src]="team.image" alt="{{ team.label }}"
+        class="w-2/3 h-auto object-contain rounded-lg shadow-lg" style="height: 50vh;">
     </div>
 
     <!-- Section d'informations sur l'équipe -->
@@ -33,8 +34,8 @@
       <div class="text-2xl font-medium text-primary-light" *ngIf="team.coach">
         <span *ngIf="team.coach" class="font-bold">Entraîneur :</span> {{ team.coach }}
       </div>
-      <div class="text-2xl font-medium text-primary-light mt-6" *ngIf="team.sponsor">
-        <span *ngIf="team.sponsor" class="font-bold">Sponsor :</span> {{ team.sponsor }}
+      <div class="text-2xl font-medium text-primary-light mt-6" *ngIf="team.sponsor.length > 0">
+        <span class="font-bold">Sponsor :</span> {{ team.sponsor.join(', ') }}
       </div>
       <div class="text-2xl font-medium text-primary-light mt-6" *ngIf="team.kitSupplier">
         <span *ngIf="team.kitSupplier" class="font-bold">Fournisseur de maillots :</span> {{ team.kitSupplier }}
@@ -55,9 +56,12 @@
       <div *ngIf="team.socialMediaFollowers">
         <div class="text-4xl font-bold text-primary-light">Abonnés sur les réseaux sociaux</div>
         <div class="mt-4 text-2xl text-primary-light">
-          <div *ngIf="team.socialMediaFollowers[0]"><span class="font-bold">Instagram :</span> {{ team.socialMediaFollowers[0] | number }}</div>
-          <div *ngIf="team.socialMediaFollowers[1]"><span class="font-bold">Twitter :</span> {{ team.socialMediaFollowers[1] | number }}</div>
-          <div *ngIf="team.socialMediaFollowers[2]"><span class="font-bold">Facebook :</span> {{ team.socialMediaFollowers[2] | number }}</div>
+          <div *ngIf="team.socialMediaFollowers[0]"><span class="font-bold">Instagram :</span> {{
+            team.socialMediaFollowers[0] | number }}</div>
+          <div *ngIf="team.socialMediaFollowers[1]"><span class="font-bold">Twitter :</span> {{
+            team.socialMediaFollowers[1] | number }}</div>
+          <div *ngIf="team.socialMediaFollowers[2]"><span class="font-bold">Facebook :</span> {{
+            team.socialMediaFollowers[2] | number }}</div>
         </div>
       </div>
     </div>

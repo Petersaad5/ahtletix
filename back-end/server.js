@@ -392,9 +392,5 @@ app.get('/autoCompletion', async (req, res) => {
 }); 
 
 // TODO list
-// 2. create api calls that work for the search bar
 // 3. make the api call of the search bar work with the filters
-// 4. autocompletion
-
-
-// TODO check if the input is neither a sport nor a human
+// get random athletes and teams for the sports 

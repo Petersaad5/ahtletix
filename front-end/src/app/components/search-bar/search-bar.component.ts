@@ -12,12 +12,12 @@ import { SharedDataService } from '../../services/shared-data.service';
   styleUrls: ['./search-bar.component.css'],
 })
 export class SearchBarComponent implements OnInit {
-  searchKeyWords: string = ''; // Holds the search input value
+  searchKeyWords: string = '';
   athleteData: any = null;
   error: string = '';
 
-  sportsFilters: string[] = []; // Sports filters received from the shared service
-  countriesFilters: string[] = []; // Country filters received from the shared service
+  sportsFilters: string[] = [];
+  countriesFilters: string[] = [];
 
   constructor(
     private searchService: SearchService,
@@ -25,12 +25,9 @@ export class SearchBarComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    // Subscribe to sports filters
     this.sharedDataService.sportsFilters$.subscribe((filters) => {
       this.sportsFilters = filters;
     });
-
-    // Subscribe to country filters
     this.sharedDataService.countriesFilters$.subscribe((filters) => {
       this.countriesFilters = filters;
     });
@@ -42,13 +39,13 @@ export class SearchBarComponent implements OnInit {
       return;
     }
 
-    // Prepare the filters
     const filters = {
       sports: this.sportsFilters,
       countries: this.countriesFilters,
     };
 
-    // Send the search request to the backend
+    //console.log('Filters sent to backend:', filters);
+
     this.searchService.search(this.searchKeyWords, filters).subscribe({
       next: (data) => {
         this.athleteData = data;

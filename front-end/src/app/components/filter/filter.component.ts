@@ -316,6 +316,7 @@ export class FilterComponent {
   selectCountry(country: string) {
     if (!this.countriesFilters.includes(country)) {
       this.countriesFilters.push(country);
+      this.sharedDataService.updateCountriesFilters(this.countriesFilters); // Notify shared service
     }
     this.countrySearch = ''; // Clear the input field
     this.filteredCountries = []; // Clear the dropdown
@@ -324,6 +325,7 @@ export class FilterComponent {
   selectSport(sport: string) {
     if (!this.sportsFilters.includes(sport)) {
       this.sportsFilters.push(sport);
+      this.sharedDataService.updateSportsFilters(this.sportsFilters); // Notify shared service
     }
     this.sportSearch = ''; // Clear the input field
     this.filteredSports = []; // Clear the dropdown
@@ -331,9 +333,11 @@ export class FilterComponent {
 
   removeCountryFilter(index: number) {
     this.countriesFilters.splice(index, 1);
+    this.sharedDataService.updateCountriesFilters(this.countriesFilters); // Notify shared service
   }
 
   removeSportFilter(index: number) {
     this.sportsFilters.splice(index, 1);
+    this.sharedDataService.updateSportsFilters(this.sportsFilters); // Notify shared service
   }
 }

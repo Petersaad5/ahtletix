@@ -20,6 +20,8 @@ export class SearchBarComponent implements OnInit {
   error: string = '';
   autocompleteDisplay: boolean = false; 
   suggestions: SearchResult[] = [];
+  playerSuggestions: SearchResult[] = [];
+  teamSuggestions: SearchResult[] = [];
   sportsFilters: string[] = [];
   countriesFilters: string[] = [];
   private backendUrl = 'http://localhost:3000';
@@ -52,8 +54,6 @@ export class SearchBarComponent implements OnInit {
       countries: this.countriesFilters,
     };
 
-    //console.log('Filters sent to backend:', filters);
-
     this.searchService.search(this.searchKeyWords, filters).subscribe({
       next: (data) => {
         this.athleteData = data;
@@ -67,7 +67,6 @@ export class SearchBarComponent implements OnInit {
     });
   }
 
-  // TODO un api annule le call d'avant
   autocompleteLoad(input: string) {
     if (input.length > 2) {
       console.log(input);
@@ -78,6 +77,8 @@ export class SearchBarComponent implements OnInit {
       }).subscribe((data: SearchResult[]) => {
         this.autocompleteDisplay = true;
         this.suggestions = data;
+        this.playerSuggestions = data.filter(suggestion => suggestion.matchType === 'athlete');
+        this.teamSuggestions = data.filter(suggestion => suggestion.matchType === 'team');
       });
     } else {
       this.autocompleteDisplay = false;
@@ -94,5 +95,4 @@ export class SearchBarComponent implements OnInit {
       this.router.navigate([`/${suggestion.matchType}`]);
     });
   }
-  
 }

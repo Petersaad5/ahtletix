@@ -2,42 +2,42 @@
   <!-- Section d'en-tête -->
   <div class="w-full text-center py-6 bg-primary-light text-neutral-light">
     <div class="text-5xl font-bold">Informations sur l'équipe : {{ team.label }}</div>
-    <div class="text-xl mt-2 italic">Origine : {{ team.country }}</div>
+    <div class="text-xl mt-2 italic" *ngIf="team.country">Origine : {{ team.country }}</div>
   </div>
 
   <!-- Section de contenu principal -->
   <div class="flex flex-row w-full flex-grow">
     <!-- Section de l'image de l'équipe -->
     <div class="w-1/2 flex items-center justify-center bg-neutral-light p-6">
-      <img [src]="team.image" alt="{{ team.label }}" class="w-2/3 h-auto object-contain rounded-lg shadow-lg" style="height: 50vh;">
+      <img *ngIf="team.image" [src]="team.image" alt="{{ team.label }}" class="w-2/3 h-auto object-contain rounded-lg shadow-lg" style="height: 50vh;">
     </div>
 
     <!-- Section d'informations sur l'équipe -->
     <div class="w-1/2 flex flex-col justify-start p-12">
       <div class="text-6xl font-black text-primary-light">{{ team.label }}</div>
-      <div class="text-3xl font-semibold text-primary-light mt-4">
-        <span class="font-bold">Surnom :</span> {{ team.nickname }}
+      <div class="text-3xl font-semibold text-primary-light mt-4" *ngIf="team.nickname">
+        <span *ngIf="team.nickname" class="font-bold">Surnom :</span> {{ team.nickname }}
       </div>
-      <div class="text-2xl font-medium text-primary-light mt-6">
-        <span class="font-bold">Sport :</span> {{ team.sport }}
+      <div class="text-2xl font-medium text-primary-light mt-6" *ngIf="team.sport">
+        <span *ngIf="team.sport" class="font-bold">Sport :</span> {{ team.sport }}
       </div>
-      <div class="text-2xl font-medium text-primary-light">
-        <span class="font-bold">Création :</span> {{ team.inception | date: 'd MMMM, yyyy' }}
+      <div class="text-2xl font-medium text-primary-light" *ngIf="team.inception">
+        <span *ngIf="team.inception" class="font-bold">Création :</span> {{ team.inception | date: 'd MMMM, yyyy' }}
       </div>
-      <div class="text-2xl font-medium text-primary-light">
-        <span class="font-bold">Stade :</span> {{ team.homeVenue }}
+      <div class="text-2xl font-medium text-primary-light" *ngIf="team.homeVenue">
+        <span *ngIf="team.homeVenue" class="font-bold">Stade :</span> {{ team.homeVenue }}
       </div>
-      <div class="text-2xl font-medium text-primary-light">
-        <span class="font-bold">Ligue :</span> {{ team.league }}
+      <div class="text-2xl font-medium text-primary-light" *ngIf="team.league">
+        <span *ngIf="team.league" class="font-bold">Ligue :</span> {{ team.league }}
       </div>
-      <div class="text-2xl font-medium text-primary-light">
-        <span class="font-bold">Entraîneur :</span> {{ team.coach }}
+      <div class="text-2xl font-medium text-primary-light" *ngIf="team.coach">
+        <span *ngIf="team.coach" class="font-bold">Entraîneur :</span> {{ team.coach }}
       </div>
-      <div class="text-2xl font-medium text-primary-light mt-6">
-        <span class="font-bold">Sponsor :</span> {{ team.sponsor }}
+      <div class="text-2xl font-medium text-primary-light mt-6" *ngIf="team.sponsor">
+        <span *ngIf="team.sponsor" class="font-bold">Sponsor :</span> {{ team.sponsor }}
       </div>
-      <div class="text-2xl font-medium text-primary-light mt-6">
-        <span class="font-bold">Fournisseur de maillots :</span> {{ team.kitSupplier }}
+      <div class="text-2xl font-medium text-primary-light mt-6" *ngIf="team.kitSupplier">
+        <span *ngIf="team.kitSupplier" class="font-bold">Fournisseur de maillots :</span> {{ team.kitSupplier }}
       </div>
     </div>
   </div>
@@ -46,18 +46,18 @@
   <div class="w-full p-8 bg-neutral-light">
     <div class="max-w-6xl mx-auto">
       <!-- Section de l'icône de l'équipe -->
-      <div class="mb-8 flex justify-center items-center">
+      <div class="mb-8 flex justify-center items-center" *ngIf="team.logo">
         <div class="text-4xl font-bold text-primary-light mr-4">Icône de l'équipe :</div>
         <img [src]="team.logo" alt="Logo de l'équipe" class="h-20 w-auto object-contain">
       </div>
 
       <!-- Section des abonnés sur les réseaux sociaux -->
-      <div>
+      <div *ngIf="team.socialMediaFollowers">
         <div class="text-4xl font-bold text-primary-light">Abonnés sur les réseaux sociaux</div>
         <div class="mt-4 text-2xl text-primary-light">
-          <div><span class="font-bold">Instagram :</span> {{ team.socialMediaFollowers.Instagram | number }}</div>
-          <div><span class="font-bold">Twitter :</span> {{ team.socialMediaFollowers.Twitter | number }}</div>
-          <div><span class="font-bold">Facebook :</span> {{ team.socialMediaFollowers.Facebook | number }}</div>
+          <div *ngIf="team.socialMediaFollowers[0]"><span class="font-bold">Instagram :</span> {{ team.socialMediaFollowers[0] | number }}</div>
+          <div *ngIf="team.socialMediaFollowers[1]"><span class="font-bold">Twitter :</span> {{ team.socialMediaFollowers[1] | number }}</div>
+          <div *ngIf="team.socialMediaFollowers[2]"><span class="font-bold">Facebook :</span> {{ team.socialMediaFollowers[2] | number }}</div>
         </div>
       </div>
     </div>

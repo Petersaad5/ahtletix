@@ -15,23 +15,22 @@
     <!-- Section des informations sur le joueur -->
     <div class="w-1/2 flex flex-col justify-start p-12">
       <div class="text-6xl font-black text-primary-light">{{ player.name }}</div>
-      <div class="text-3xl font-semibold text-primary-light mt-4">{{ player.position }}</div>
-      <div class="text-3xl font-semibold text-primary-light">{{ player.team }}</div>
+      <div *ngIf="player.name" class="text-3xl font-semibold text-primary-light mt-4">{{ player.position.join(', ') }}</div>      <div class="text-3xl font-semibold text-primary-light">{{ player.team }}</div>
       
       <div class="text-2xl font-medium text-primary-light mt-6">
-        <span class="font-bold">Taille :</span> {{ player.height }}
+        <span *ngIf="player.height" class="font-bold">Taille :</span> {{ player.height }} cm
       </div>
       <div class="text-2xl font-medium text-primary-light">
-        <span class="font-bold">Poids :</span> {{ player.weight }}
+        <span *ngIf="player.weight" class="font-bold">Poids :</span> {{ player.weight }} kg
       </div>
       <div class="text-2xl font-medium text-primary-light">
-        <span class="font-bold">Âge :</span> {{ player.age }} ans
+        <span *ngIf="player.birthDate" class="font-bold">Âge :</span> {{ calculateAge(player.birthDate) }} ans
       </div>
       <div class="text-2xl font-medium text-primary-light mt-4">
-        <span class="font-bold">Nationalité :</span> {{ player.nationality }}
+        <span *ngIf="player.nationality" class="font-bold">Nationalité :</span> {{ player.nationality }}
       </div>
       <div class="text-2xl font-medium text-primary-light mt-4">
-        <span class="font-bold">Lieu de naissance :</span> {{ player.placeOfBirth }}
+        <span *ngIf="player.placeOfBirth" class="font-bold">Lieu de naissance :</span> {{ player.placeOfBirth }}
       </div>
       <div class="text-xl font-light text-primary-light mt-6 italic">{{ player.information }}</div>
     </div>
@@ -44,11 +43,11 @@
       <div class="mb-8">
         <div class="text-4xl font-bold text-primary-light">Équipes</div>
         <ul class="mt-4 text-2xl text-primary-light">
-          <li *ngFor="let team of player.teams">
-            <span class="font-bold text-primary-light">{{ team.name }}</span>
-          </li>
+            <li *ngFor="let team of player.teams">
+                <span class="text-primary-light">{{ team }}</span>
+            </li>
         </ul>
-      </div>
+    </div>
 
       <!-- Section des récompenses -->
       <div class="mb-8">
@@ -61,9 +60,15 @@
       <!-- Section des abonnés sur les réseaux sociaux -->
       <div>
         <div class="text-4xl font-bold text-primary-light">Abonnés sur les réseaux sociaux</div>
-        <div class="mt-4 text-2xl text-primary-light">
-          <div><span class="font-bold text-primary-light">Instagram : </span> <span>{{ player.socialMediaFollowers.Instagram }}</span></div>
-          <div><span class="font-bold text-primary-light">Twitter : </span> <span>{{ player.socialMediaFollowers.Twitter }}</span></div>
+         <div class="mt-4 text-2xl text-primary-light">
+            <div *ngIf="player.socialMediaFollowers[0]">
+                <span class="font-bold text-primary-light">Instagram : </span> 
+                <span>{{ player.socialMediaFollowers[0] }}</span>
+            </div>
+            <div *ngIf="player.socialMediaFollowers[1]">
+                <span class="font-bold text-primary-light">Twitter : </span> 
+                <span>{{ player.socialMediaFollowers[1] }}</span>
+            </div>
         </div>
       </div>
     </div>

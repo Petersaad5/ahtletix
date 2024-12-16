@@ -28,7 +28,7 @@ app.get('/carouselSearch', async (req, res) => {
     // information about a sport was requested
     const sport = req.query.sport; // the sport that the client wants to get information about
     // array of the sports that the client can search for
-    const sports = ["basketball", "association football", "handball", "tennis", "American football"]; 
+    const sports = ["basketball", "association football", "handball", "tennis", "American football", "boxing", "volleyball"]; 
     let query = ""; 
     // sparql query
     if(sports.includes(sport)) {

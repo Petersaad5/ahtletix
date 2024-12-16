@@ -38,7 +38,7 @@ app.get('/carouselSearch', async (req, res) => {
         ?entity rdfs:label "${sport}"@en.
 
         # Retrieve the label of the entity
-        ?entity rdfs:label ?label. FILTER (LANG(?label) = "en").
+        ?entity rdfs:label ?label. FILTER (LANG(?label) = "fr").
         
         # Count all properties
         ?entity ?property ?value.
@@ -68,7 +68,7 @@ app.get('/carouselSearch', async (req, res) => {
         OPTIONAL { ?entity wdt:P1872 ?minPlayers. }
         
         # Fetch labels for related entities
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "en". }
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "fr,en". }
         }
         GROUP BY ?entity ?label ?image ?inception ?authorityLabel 
                 ?countryOfOriginLabel ?icon ?unicode ?maxPlayers ?minPlayers
@@ -171,7 +171,7 @@ app.get('/searchBar', async (req, res) => {
         OPTIONAL { ${input} wdt:P1449 ?nickname. }
 
         # Fetch labels for related entities
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "fr". }
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "fr,en". }
     }
     `;
     } else if(typeOfSearch === 'team') {
@@ -229,7 +229,7 @@ app.get('/searchBar', async (req, res) => {
         OPTIONAL { ${input} wdt:P571 ?inception. }
 
         # Fetch labels for related entities
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "fr". }
+        SERVICE wikibase:label { bd:serviceParam wikibase:language "fr,en". }
         }
         `; 
     } else {
@@ -272,6 +272,7 @@ app.get('/searchBar', async (req, res) => {
         awards = [...new Set(awards)];
         socialMediaFollowers = [...new Set(socialMediaFollowers)];
         position = [...new Set(position)];
+
         object = new Athlete(
             'label' in bindings[0] ? bindings[0].label.value : null,
             'sportLabel' in bindings[0] ? bindings[0].sportLabel.value : null,
@@ -355,7 +356,7 @@ app.get('/autoCompletion', async (req, res) => {
     # BIND match type (athlete or team)
     BIND(IF(BOUND(?athleteId), "athlete", IF(BOUND(?sport), "team", "unknown")) AS ?matchType)
 
-    SERVICE wikibase:label { bd:serviceParam wikibase:language "fr". }
+    SERVICE wikibase:label { bd:serviceParam wikibase:language "fr,en". }
     }
     GROUP BY ?item ?itemLabel ?matchType
     ORDER BY DESC(?claimCount)  # Order by the number of claims (most popular based on claims)

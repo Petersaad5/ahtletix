@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { SharedDataService } from '../../services/shared-data.service';
 
 @Component({
   selector: 'app-sport-page',
@@ -11,11 +12,12 @@ import { CommonModule } from '@angular/common';
 export class SportPageComponent implements OnInit {
   sport: any = {};
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private sharedDataService : SharedDataService) { }
 
   ngOnInit(): void {
-    this.http.get('sport.json').subscribe(data => {
+    this.sharedDataService.sportCarousel$.subscribe((data) => {
       this.sport = data;
+      console.log(this.sport);
     });
   }
 }

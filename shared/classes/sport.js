@@ -3,7 +3,7 @@ class Sport {
     constructor(label, image, inception, authority, countryOfOrigin, icon, unicode, maxPlayers, minPlayers) {
         this.label = label; 
         this.image = image; //P18
-        this.insception = inception; //P571
+        this.inception = inception; //P571
         this.authority = authority; //P797
         this.countryOfOrigin = countryOfOrigin; //P495
         this.icon = icon; //P2910

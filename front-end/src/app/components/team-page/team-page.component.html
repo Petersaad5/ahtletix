@@ -53,7 +53,7 @@
       </div>
 
       <!-- Section des abonnés sur les réseaux sociaux -->
-      <div *ngIf="team.socialMediaFollowers">
+      <div *ngIf="team.socialMediaFollowers && team.socialMediaFollowers.length > 0">
         <div class="text-4xl font-bold text-primary-light">Abonnés sur les réseaux sociaux</div>
         <div class="mt-4 text-2xl text-primary-light">
           <div *ngIf="team.socialMediaFollowers[0]"><span class="font-bold">Instagram :</span> {{

@@ -59,26 +59,26 @@
       </div>
 
       <!-- Section des récompenses -->
-      <div class="mb-8">
-        <div class="text-4xl font-bold text-primary-light">Récompenses</div>
-        <ul class="mt-4 text-2xl text-primary-gold">
-          <li *ngFor="let award of player.awards">{{ award }}</li>
-        </ul>
+      <div class="mb-8" *ngIf="player.awards && player.awards.length > 0">
+          <div class="text-4xl font-bold text-primary-light">Récompenses</div>
+          <ul class="mt-4 text-2xl text-primary-gold">
+              <li *ngFor="let award of player.awards">{{ award }}</li>
+          </ul>
       </div>
 
       <!-- Section des abonnés sur les réseaux sociaux -->
-      <div>
-        <div class="text-4xl font-bold text-primary-light">Abonnés sur les réseaux sociaux</div>
-        <div class="mt-4 text-2xl text-primary-light">
-          <div *ngIf="player.socialMediaFollowers[0]">
-            <span class="font-bold text-primary-light">Instagram : </span>
-            <span>{{ player.socialMediaFollowers[0] }}</span>
+        <div *ngIf="player.socialMediaFollowers && player.socialMediaFollowers.length > 0">
+          <div class="text-4xl font-bold text-primary-light">Abonnés sur les réseaux sociaux</div>
+          <div class="mt-4 text-2xl text-primary-light">
+              <div *ngIf="player.socialMediaFollowers[0]">
+                  <span class="font-bold text-primary-light">Instagram : </span>
+                  <span>{{ player.socialMediaFollowers[0] }}</span>
+              </div>
+              <div *ngIf="player.socialMediaFollowers[1]">
+                  <span class="font-bold text-primary-light">Twitter : </span>
+                  <span>{{ player.socialMediaFollowers[1] }}</span>
+              </div>
           </div>
-          <div *ngIf="player.socialMediaFollowers[1]">
-            <span class="font-bold text-primary-light">Twitter : </span>
-            <span>{{ player.socialMediaFollowers[1] }}</span>
-          </div>
-        </div>
       </div>
     </div>
   </div>

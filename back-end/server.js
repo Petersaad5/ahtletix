@@ -139,8 +139,8 @@ app.get("/searchBar", async (req, res) => {
         # Retrieve gender (P21)
         OPTIONAL { ${input} wdt:P21 ?gender. }
         
-        # Retrieve nationality (P27)
-        OPTIONAL { ${input} wdt:P27 ?nationality. }
+        # Retrieve nationality (P1532)
+        OPTIONAL { ${input} wdt:P1532 ?nationality. }
         
         # Retrieve height (P2048)
         OPTIONAL { ${input} wdt:P2048 ?height. }
@@ -358,14 +358,6 @@ app.get("/autoCompletion", async (req, res) => {
   const input = req.query.input || ""; // Keyword for search (e.g., "Michael")
   const sports = req.query.sports?.split(",").map((s) => s.trim()) || [];
   const countries = req.query.countries?.split(",").map((c) => c.trim()) || [];
-
-  //   const input = req.query.input || ""; // Keyword for search (e.g., "Michael")
-  //   const sports = req.query.filters.sports;
-  //   const countries = req.query.filters.countries;
-
-  console.log("input", input);
-  console.log("sports", sports);
-  console.log("countries", countries);
 
   // Define mappings for sports and countries
   const sportMapping = {
@@ -666,8 +658,6 @@ app.get("/autoCompletion", async (req, res) => {
     }
     LIMIT 50
   `;
-
-  console.log(`Generated SPARQL Query:\n${query}`); // Debug query
 
   try {
     // Send the query to Wikidata

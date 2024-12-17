@@ -1,22 +1,82 @@
 <div class="flex flex-col items-center w-full space-y-4">
-    <div class="flex items-center justify-center space-x-2 w-full">
-      <select class="select select-bordered bg-secondary-light text-black max-w-xs">
-        <option disabled selected>Sélectionner un filtre</option>
-        <option>Filtrer par Pays</option>
-        <option>Filtrer par Sport</option>
-      </select>
-  
-      <input type="text" [(ngModel)]="newFilter" placeholder="Ecrire le filtre" class="input input-bordered bg-primary-light w-full max-w-xs" />
-      <button class="btn btn-primary bg-secondary-light" (click)="addFilter()">Ajouter</button>
-    </div>
-  
-    <!-- List of filters -->
-    <div *ngIf="filters.length > 0" class="w-full max-w-xs bg-gray-300 p-4 rounded">
-      <ul class="list-disc list-inside">
-        <li *ngFor="let filter of filters; let i = index" class="text-primary flex items-center justify-between">
-          <span>{{ filter }}</span>
-          <button class="text-red-500 ml-1" (click)="removeFilter(i)">x</button>
+  <!-- Filter Type and Search Input Aligned Horizontally -->
+  <div class="flex items-center space-x-4 w-full max-w-lg relative" [ngStyle]="{
+      'justify-content': !filterType ? 'center' : 'space-between'
+    }">
+    <!-- Filter Type Dropdown -->
+    <select [(ngModel)]="filterType" class="select select-bordered bg-secondary-light text-black" [ngStyle]="{
+        width: filterType ? '250px' : '250px'
+      }">
+      <option disabled selected value="">Sélectionner un filtre</option>
+      <option value="country">Filtrer par Pays</option>
+      <option value="sport">Filtrer par Sport</option>
+    </select>
+
+    <!-- Search Input -->
+    <div *ngIf="filterType" class="relative w-full" style="width: 250px">
+      <input type="text" [placeholder]="
+          filterType === 'country'
+            ? 'Rechercher un pays'
+            : 'Rechercher un sport'
+        " [(ngModel)]="filterSearch" class="input input-bordered bg-primary-light text-white w-full"
+        style="width: 250px" />
+
+      <!-- Filtered Countries -->
+      <ul *ngIf="filterType === 'country' && filteredCountries.length > 0"
+        class="menu bg-primary-light rounded shadow-lg w-full absolute top-10 left-0 z-10" style="
+          max-height: 100px;
+          overflow-y: auto;
+          overflow-x: hidden;
+          display: block;
+          border: 1px solid #ddd;
+        ">
+        <li *ngFor="let country of filteredCountries" class="text-white hover:bg-secondary-light cursor-pointer"
+          (click)="selectCountry(country)">
+          {{ country }}
+        </li>
+      </ul>
+
+      <!-- Filtered Sports -->
+      <ul *ngIf="filterType === 'sport' && filteredSports.length > 0"
+        class="menu bg-primary-dark rounded shadow-lg w-full absolute top-10 left-0 z-10" style="
+          max-height: 100px;
+          overflow-y: auto;
+          overflow-x: hidden;
+          display: block;
+          border: 1px solid #ddd;
+        ">
+        <li *ngFor="let sport of filteredSports" class="text-white hover:bg-secondary-dark cursor-pointer"
+          (click)="selectSport(sport)">
+          {{ sport }}
         </li>
       </ul>
     </div>
   </div>
+
+  <!-- Selected Filters -->
+  <div class="w-full max-w-lg flex justify-between space-x-4 mt-4">
+    <!-- Display Selected Countries -->
+    <div *ngIf="countriesFilters.length > 0" class="bg-gray-300 p-4 rounded w-1/2">
+      <h3 class="text-lg font-bold mb-2">Filtres par Pays</h3>
+      <ul class="list-disc list-inside">
+        <li *ngFor="let country of countriesFilters; let i = index" class="flex justify-between items-center">
+          <span>{{ country }}</span>
+          <button class="text-red-500" (click)="removeCountryFilter(i)">
+            x
+          </button>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Display Selected Sports -->
+    <div *ngIf="sportsFilters.length > 0" class="bg-gray-300 p-4 rounded w-1/2">
+      <h3 class="text-lg font-bold mb-2">Filtres par Sport</h3>
+      <ul class="list-disc list-inside">
+        <li *ngFor="let sport of sportsFilters; let i = index" class="flex justify-between items-center">
+          <span>{{ sport }}</span>
+          <button class="text-red-500" (click)="removeSportFilter(i)">x</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
   templateUrl: './search-bar.component.html',
   styleUrls: ['./search-bar.component.css'],
 })
-export class SearchBarComponent implements OnInit {
+export class SearchBarComponent {
   searchKeyWords: string = '';
   athleteData: any = null;
   error: string = '';
@@ -33,47 +33,30 @@ export class SearchBarComponent implements OnInit {
     private router : Router
   ) {}
 
-  ngOnInit() {
+  getFilters() {
     this.sharedDataService.sportsFilters$.subscribe((filters) => {
       this.sportsFilters = filters;
     });
     this.sharedDataService.countriesFilters$.subscribe((filters) => {
       this.countriesFilters = filters;
     });
-    this.autocompleteDisplay = false; 
   }
 
-  search() {
-    if (!this.searchKeyWords.trim()) {
-      alert('Veuillez entrer un terme de recherche.');
-      return;
-    }
-
-    const filters = {
-      sports: this.sportsFilters,
-      countries: this.countriesFilters,
-    };
-
-    this.searchService.search(this.searchKeyWords, filters).subscribe({
-      next: (data) => {
-        this.athleteData = data;
-        console.log('Search Results:', data);
-        this.error = '';
-      },
-      error: (err) => {
-        this.error = 'Erreur lors de la recherche. Veuillez réessayer.';
-        console.error(err);
-      },
-    });
-  }
 
   autocompleteLoad(input: string) {
     if (input.length > 2) {
-      console.log(input);
-  
+      this.getFilters(); // initialize filters in the component
+      let filters = {
+        sports: this.sportsFilters,
+        countries: this.countriesFilters,
+      };
+
       // Send API call to the backend
       this.http.get<SearchResult[]>(`${this.backendUrl}/autoCompletion`, {
-        params: { input } // send the filters as well
+        params: { 
+          input : input, 
+          filters : JSON.stringify(filters)
+        } 
       }).subscribe((data: SearchResult[]) => {
         this.autocompleteDisplay = true;
         this.suggestions = data;

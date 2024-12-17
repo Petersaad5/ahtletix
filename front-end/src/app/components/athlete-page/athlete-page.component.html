@@ -21,10 +21,10 @@
       <div class="text-3xl font-semibold text-primary-light">{{ player.team }}</div>
 
       <div *ngIf="player.height" class="text-2xl font-medium text-primary-light mt-6">
-        <span class="font-bold">Taille : </span> {{ player.height }} cm 
+        <span class="font-bold">Taille :</span> {{ player.height }} cm
       </div>
       <div *ngIf="player.weight" class="text-2xl font-medium text-primary-light">
-        <span class="font-bold">Poids : </span> {{ player.weight }} kg 
+        <span class="font-bold">Poids :</span> {{ player.weight }} kg
       </div>
       <div *ngIf="player.birthDate && !player.deathDate" class="text-2xl font-medium text-primary-light">
         <span class="font-bold">Âge : </span> {{ calculateAge(player.birthDate) }} ans 

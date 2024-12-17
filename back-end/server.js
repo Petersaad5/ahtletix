@@ -111,7 +111,6 @@ app.get('/carouselSearch', async (req, res) => {
 app.get('/searchBar', async (req, res) => {
     let input = req.query.input; // the id of the entity that the client wants to search for
     let typeOfSearch = req.query.typeOfSearch; // type of the entity that the client wants to search for
-    let filters = req.query.filters; // the filters that the client wants to apply to the search
 
     let query = '';
     if(typeOfSearch === 'athlete') {
@@ -334,6 +333,7 @@ app.get('/searchBar', async (req, res) => {
 
 app.get('/autoCompletion', async (req, res) => {
     let input = req.query.input; // the input that the client wants to search for
+    let filters = req.query.filters; // the filters that the client wants to apply to the search
     let query = `SELECT DISTINCT ?itemLabel ?item (COUNT(?claim) AS ?claimCount) ?matchType WHERE {
     # Perform the search using the mwapi service
     SERVICE wikibase:mwapi {
@@ -344,9 +344,14 @@ app.get('/autoCompletion', async (req, res) => {
         ?item wikibase:apiOutputItem mwapi:item.
     } 
 
-    OPTIONAL { # Athlete (P1447)
+    OPTIONAL { # Athlete 
         ?item wdt:P5815 ?athleteId. 
     }  
+    
+    OPTIONAL { # Athlete 
+        ?item wdt:P1447 ?athleteId. 
+    }
+
     OPTIONAL { # Team's sport (P641)
         ?item wdt:P641 ?sport; 
               wdt:P31 ?type.

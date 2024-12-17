@@ -1,29 +1,90 @@
 <div class="flex items-center space-x-2 w-full relative">
   <!-- Search Input -->
-  <input #searchInput (input)="autocompleteLoad(searchInput.value)" type="text" [(ngModel)]="searchKeyWords"
+  <input
+    #searchInput
+    (input)="autocompleteLoad(searchInput.value)"
+    type="text"
+    [(ngModel)]="searchKeyWords"
     placeholder="Rechercher athlètes ou équipes"
-    class="input input-bordered w-full w-max-md bg-primary-light text-white px-4 py-2 rounded-md shadow-md" />
+    class="input input-bordered w-full w-max-md bg-primary-light text-white px-4 py-2 rounded-md shadow-md"
+  />
 
   <!-- Autocomplete Dropdown -->
-  <div id="autocomplete" *ngIf="autocompleteDisplay"
-    class="absolute top-full left-0 w-full bg-white shadow-lg rounded-md z-50 mt-1 border border-gray-300">
+  <div
+    id="autocomplete"
+    *ngIf="autocompleteDisplay"
+    class="absolute top-full left-0 w-full bg-white shadow-lg rounded-md z-50 mt-1 border border-gray-300"
+  >
     <ul>
       <!-- Player Autocompletion -->
       <li class="px-4 py-2 bg-gray-200 font-bold">Athlètes</li>
-      <li *ngFor="let suggestion of playerSuggestions"
-        class="px-4 py-2 hover:bg-primary-light hover:text-white cursor-pointer transition-all">
-        <button (click)="loadInformationPage(suggestion)" class="w-full text-left text-primary-dark">
+      <li
+        *ngFor="let suggestion of playerSuggestions"
+        class="px-4 py-2 hover:bg-primary-light hover:text-white cursor-pointer transition-all"
+      >
+        <button
+          (click)="loadInformationPage(suggestion)"
+          class="w-full text-left text-primary-dark"
+        >
           {{ suggestion.label }}
         </button>
       </li>
+
       <!-- Team Autocompletion -->
       <li class="px-4 py-2 bg-gray-200 font-bold">Équipes</li>
-      <li *ngFor="let suggestion of teamSuggestions"
-        class="px-4 py-2 hover:bg-primary-light hover:text-white cursor-pointer transition-all">
-        <button (click)="loadInformationPage(suggestion)" class="w-full text-left text-primary-dark">
+      <li
+        *ngFor="let suggestion of teamSuggestions"
+        class="px-4 py-2 hover:bg-primary-light hover:text-white cursor-pointer transition-all"
+      >
+        <button
+          (click)="loadInformationPage(suggestion)"
+          class="w-full text-left text-primary-dark"
+        >
           {{ suggestion.label }}
         </button>
       </li>
     </ul>
   </div>
 </div>
+
+<!-- Full-Screen Loading Overlay -->
+<div
+  *ngIf="isLoading"
+  style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    pointer-events: all;
+  "
+>
+  <!-- Spinner -->
+  <div
+    style="
+      border: 6px solid #f3f3f3;
+      border-top: 6px solid #3498db;
+      border-radius: 50%;
+      width: 60px;
+      height: 60px;
+      animation: spin 1s linear infinite;
+    "
+  ></div>
+</div>
+
+<!-- Inline Keyframes -->
+<style>
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+</style>

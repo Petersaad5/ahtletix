@@ -6,6 +6,7 @@ import { SharedDataService } from '../../services/shared-data.service';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { SearchResult } from '../../search-result';
 import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-search-bar',
@@ -24,6 +25,7 @@ export class SearchBarComponent {
   teamSuggestions: SearchResult[] = [];
   sportsFilters: string[] = [];
   countriesFilters: string[] = [];
+  private apiCallsToBack : Subscription = Subscription.EMPTY; // latest API call to the backend to unsubscribe if a new one is made
   private backendUrl = 'http://localhost:3000';
 
   constructor(
@@ -49,8 +51,10 @@ export class SearchBarComponent {
       let countries = this.countriesFilters.join(',');
 
       // Send API call to the backend
-      this.http
-        .get<SearchResult[]>(`${this.backendUrl}/autoCompletion`, {
+      if(this.apiCallsToBack !== Subscription.EMPTY) {
+        this.apiCallsToBack.unsubscribe();
+      }
+      this.apiCallsToBack = this.http.get<SearchResult[]>(`${this.backendUrl}/autoCompletion`, {
           params: {
             input: input,
             sports: sports,

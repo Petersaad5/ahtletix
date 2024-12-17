@@ -20,14 +20,18 @@
       </div>
       <div class="text-3xl font-semibold text-primary-light">{{ player.team }}</div>
 
-      <div class="text-2xl font-medium text-primary-light mt-6">
-        <span *ngIf="player.height" class="font-bold">Taille :</span> {{ player.height }} cm
+      <div *ngIf="player.height" class="text-2xl font-medium text-primary-light mt-6">
+        <span class="font-bold">Taille : </span> {{ player.height }} cm 
       </div>
-      <div class="text-2xl font-medium text-primary-light">
-        <span *ngIf="player.weight" class="font-bold">Poids :</span> {{ player.weight }} kg
+      <div *ngIf="player.weight" class="text-2xl font-medium text-primary-light">
+        <span class="font-bold">Poids : </span> {{ player.weight }} kg 
       </div>
-      <div class="text-2xl font-medium text-primary-light">
-        <span *ngIf="player.birthDate" class="font-bold">Âge :</span> {{ calculateAge(player.birthDate) }} ans
+      <div *ngIf="player.birthDate && !player.deathDate" class="text-2xl font-medium text-primary-light">
+        <span class="font-bold">Âge : </span> {{ calculateAge(player.birthDate) }} ans 
+      </div>
+      <div *ngIf="player.birthDate && player.deathDate" class="text-2xl font-medium text-primary-light">
+        <span class="font-bold">Né le : </span> {{ player.birthDate | date: 'dd/MM/yyyy' }} <br>
+        <span class="font-bold">Décédé le : </span> {{ player.deathDate | date: 'dd/MM/yyyy' }}
       </div>
       <div class="text-2xl font-medium text-primary-light mt-4">
         <span *ngIf="player.nationality" class="font-bold">Nationalité :</span> {{ player.nationality }}

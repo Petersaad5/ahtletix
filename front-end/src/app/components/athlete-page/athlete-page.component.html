@@ -47,15 +47,15 @@
   <div class="w-full p-8 bg-neutral-light">
     <div class="max-w-6xl mx-auto">
       <!-- Section des équipes -->
-      <div class="mb-8">
-        <div class="text-4xl font-bold text-primary-light">Équipes</div>
-        <ul class="mt-4 text-2xl text-primary-light">
-          <li *ngFor="let team of player.teams">
-            <button (click)="redirectToTeamPage(team.teamId)" class="hover:underline">
-              <span class="text-primary-light">{{ team.teamName }}</span>
-            </button>
-          </li>
-        </ul>
+      <div class="mb-8" *ngIf="player.teams && player.teams.length > 0">
+          <div class="text-4xl font-bold text-primary-light">Équipes</div>
+          <ul class="mt-4 text-2xl text-primary-light">
+              <li *ngFor="let team of player.teams">
+                  <button (click)="redirectToTeamPage(team.teamId)" class="hover:underline">
+                      <span class="text-primary-light">{{ team.teamName }}</span>
+                  </button>
+              </li>
+          </ul>
       </div>
 
       <!-- Section des récompenses -->

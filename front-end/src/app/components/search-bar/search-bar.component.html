@@ -2,11 +2,11 @@
   <!-- Search Input -->
   <input #searchInput (input)="autocompleteLoad(searchInput.value)" type="text" [(ngModel)]="searchKeyWords"
     placeholder="Rechercher athlètes ou équipes"
-    class="input input-bordered w-full w-max-md bg-primary-light text-white px-4 py-2 rounded-md shadow-md" />
+    class="input input-bordered w-full bg-primary-light text-white px-4 py-2 rounded-md shadow-md" />
 
   <!-- Autocomplete Dropdown -->
   <div id="autocomplete" *ngIf="autocompleteDisplay"
-    class="absolute top-full left-0 w-full bg-white shadow-lg rounded-md z-50 mt-1 border border-gray-300">
+    class="absolute left-0 right-0 top-full bg-white shadow-lg rounded-md z-50 mt-1 border border-gray-300">
     <ul>
       <!-- Player Autocompletion -->
       <li class="px-4 py-2 bg-gray-200 font-bold">Athlètes</li>
